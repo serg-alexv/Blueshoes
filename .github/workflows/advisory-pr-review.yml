@@ -1,0 +1,29 @@
+name: Blueshoes Advisory PR Review
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+jobs:
+  advisory_review:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Generate Diff Summary
+        run: |
+          git fetch origin main
+          git diff origin/main...HEAD > diff.txt
+
+      - name: Read-Only PR Review Annotator
+        uses: actions/github-script@v7
+        with:
+          script: |
+            // This is a stub for Mode B Optional PR Review Annotator
+            // The LLM system prompt MUST strictly include:
+            // "You are a read-only reviewer. You have no execution authority, no merge authority..."
+            
+            // Expected Behavior: Posts advisory findings and risk annotations to PR.
+            // MUST NOT: Fail the CI run or block the merge.
+            console.log("Advisory review triggered. Deterministic tests and humans remain authoritative.");

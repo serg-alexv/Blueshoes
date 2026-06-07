@@ -18,7 +18,6 @@ Phase 1 targets the **GL.iNet GL-MT3000** (OpenWrt) with a deterministic edge ag
 
 Read more in [Phase 1 Scope](docs/rfcs/0012-phase1-scope.md).
 
-## Project Documentation (RFCs)
 The project architecture and doctrine are maintained as an RFC corpus. See the [docs/rfcs](docs/rfcs/) directory for the complete doctrine surface.
 
 - [Runtime Doctrine](docs/rfcs/0001-runtime-doctrine.md)

@@ -11,9 +11,7 @@ Blueshoes takes network integrity and operational safety extremely seriously. Be
 
 ## Vulnerability Reporting
 Please DO NOT report security vulnerabilities through public GitHub issues.
-
-Instead, please email security reports to **g@timelabs.ru**. 
-We will attempt to acknowledge receipt within 48 hours.
+3. **Data Privacy**: Telemetry exported for diagnostic routing analysis must be strictly metadata (SNI, IP, ports, connection status) and fully anonymized. Raw payloads are never exported.
 
 ## Scope of Disclosures
 We are currently in a highly experimental Phase 1. 

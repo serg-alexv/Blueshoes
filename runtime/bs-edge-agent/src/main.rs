@@ -3,6 +3,7 @@ mod executor;
 mod journal;
 mod probes;
 mod profiles;
+mod mutation;
 
 use clap::Parser;
 use cli::{Cli, Commands};

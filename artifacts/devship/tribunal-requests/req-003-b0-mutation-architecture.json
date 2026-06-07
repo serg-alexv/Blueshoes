@@ -1,0 +1,46 @@
+{
+  "schema_id": "urn:tribunal:review-request:v1",
+  "request_id": "req-003-b0-mutation-architecture",
+  "created_at_utc": "2026-06-07T11:27:00Z",
+  "milestone": "B0.1",
+  "review_mode": "openrouter",
+  "review_target": {
+    "repo": "timelabs-npo/Blueshoes",
+    "branch": "main",
+    "commit": "HEAD",
+    "paths": [
+      "runtime/bs-edge-agent/tests/audit_test.rs",
+      "docs/governance-doctrine.md"
+    ]
+  },
+  "risk_context": {
+    "mutation_risk": "planned",
+    "router_access": false,
+    "runtime_change": true,
+    "governance_change": false,
+    "external_api_dependency": false
+  },
+  "evidence": {
+    "summary": "M5 is complete. We are approaching B0 (Edge Router Safe Mutation). However, audit_test.rs explicitly forbids hardcoding shell mutation strings ('uci set', 'nft add', etc.) in the Rust binary to prevent autonomous execution risk. We need a legally approved architectural pattern for how the bs-edge-agent will apply the deterministic SPEC/BUNDLE configuration to the router without relying on raw shell strings.",
+    "diff_summary": "N/A - Architectural Design Phase",
+    "test_output_summary": "audit_test.rs currently passes and aggressively blocks any hardcoded mutation strings.",
+    "artifact_hashes": []
+  },
+  "questions": [
+    "1. How should bs-edge-agent apply configuration state to OpenWrt if arbitrary shell strings ('uci set') are forbidden in the binary? (Options: ubus API, FFI libuci, or deterministic payload ingestion)",
+    "2. How do we ensure that any chosen mutation strategy strictly adheres to the 'Rollback is Sacred' doctrine (i.e. applying the new state, verifying, and rolling back if failed)?",
+    "3. Does the proposed mutation architecture maintain the absolute governance boundary where AGY has zero runtime authority over the edge device?"
+  ],
+  "required_roles": [
+    "architecture_consistency_reviewer",
+    "runtime_stability_reviewer",
+    "security_reviewer"
+  ],
+  "forbidden_for_reviewers": [
+    "execute commands",
+    "write repo files",
+    "access router",
+    "request secrets",
+    "make final commit/push decision"
+  ]
+}

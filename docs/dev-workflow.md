@@ -6,6 +6,7 @@
 
 > [!WARNING]
 > Do NOT build an active orchestrator, add external queueing, or create a CI/CD platform. This governance artifact defines a passive, strict, lock-by-move file contract.
+> **ANTI-ARCHITECTURE ADDICTION RULE**: No new governance layer before new runtime evidence.
 
 ## 0. Baseline Roles
 
@@ -13,7 +14,7 @@
 | :--- | :--- | :--- | :--- |
 | **ChatGPT / OpenRouter** | Architect | Writes `SPEC` to `1_pending_specs/`. | Editing repo files, pushing to git, writing shell commands. |
 | **Trae** | Executor | Reads `SPEC`, modifies files within scope, writes `BUNDLE` to `3_review_bundles/`. | Pushing to git, committing secrets, writing outside scope. |
-| **Antigravity** | Gatekeeper | Validates `BUNDLE` against Alignment Gate, performs `git push`, archives tasks. | Bypassing autotests, accepting bundles without evidence. |
+| **Antigravity** | Gatekeeper / Executor | Validates `BUNDLE` against Alignment Gate. **Bounded Delegated Execution:** AGY is permitted to execute approved local/SSH commands only from claimed SPEC envelopes and only within explicitly declared operational boundaries. | Bypassing autotests, accepting bundles without evidence, autonomous hardware execution without SPEC. |
 
 ## 1. The File-Based Message Bus
 All operations happen within the local, git-ignored `.tasks/` directory:
@@ -111,3 +112,12 @@ Executors MUST run the local autotests before generating a bundle.
 - `git diff --check`
 - `git ls-files .tasks` (must be empty).
 - Scope enforcement checks.
+
+## 5. Explicit Prerequisite Failure & Reclassification
+To prevent uncontrolled dependency-installation marathons and silent environment mutation recursion, the following rule is mandatory:
+
+If a prerequisite fails:
+1. STOP the milestone.
+2. Emit a blocker/failure bundle.
+3. Explicitly reclassify the task (e.g., creating a `b`-suffixed recovery milestone).
+4. DO NOT continue silently mutating the environment.

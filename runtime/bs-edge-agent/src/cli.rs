@@ -29,4 +29,32 @@ pub enum Commands {
         #[arg(long)]
         tail: Option<usize>,
     },
+    /// Run a quick self-diagnostic
+    Doctor {
+        #[arg(long, default_value_t = true)]
+        json: bool,
+    },
+    /// Dump safe environment variables
+    Env {
+        #[arg(long, default_value_t = true)]
+        json: bool,
+    },
+    /// Perform an explicit DNS lookup
+    Dns {
+        target: String,
+        #[arg(long, default_value_t = true)]
+        json: bool,
+    },
+    /// Perform an explicit ICMP ping (latency)
+    Latency {
+        target: String,
+        #[arg(long, default_value_t = true)]
+        json: bool,
+    },
+    /// Perform a trace to a target
+    Trace {
+        target: String,
+        #[arg(long, default_value_t = true)]
+        json: bool,
+    },
 }

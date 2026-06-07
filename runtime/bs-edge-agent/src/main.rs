@@ -54,5 +54,25 @@ fn main() {
                 }
             }
         }
+        Commands::Doctor { json: _json_flag } => {
+            let event = probes::doctor::run();
+            println!("{}", serde_json::to_string_pretty(&event).unwrap());
+        }
+        Commands::Env { json: _json_flag } => {
+            let event = probes::env::run();
+            println!("{}", serde_json::to_string_pretty(&event).unwrap());
+        }
+        Commands::Dns { target, json: _json_flag } => {
+            let event = probes::dns::run(target);
+            println!("{}", serde_json::to_string_pretty(&event).unwrap());
+        }
+        Commands::Latency { target, json: _json_flag } => {
+            let event = probes::icmp::run(target);
+            println!("{}", serde_json::to_string_pretty(&event).unwrap());
+        }
+        Commands::Trace { target, json: _json_flag } => {
+            let event = probes::trace::run(target);
+            println!("{}", serde_json::to_string_pretty(&event).unwrap());
+        }
     }
 }

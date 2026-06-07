@@ -17,13 +17,41 @@ test:
 # The correct Rust target is aarch64-unknown-linux-musl
 
 setup-cross:
-	@echo "Installing cross..."
-	cargo install cross --git https://github.com/cross-rs/cross
+	@echo "Setting up cross-compilation environment for macOS (aarch64/x86_64/apple-darwin)..."
+	@if ! command -v cargo-zigbuild &> /dev/null; then \
+		echo "cargo-zigbuild not found. Please install it with: brew install zig && cargo install cargo-zigbuild"; \
+		exit 1; \
+	fi
+	@if ! rustup target list | grep -q 'aarch64-unknown-linux-musl (installed)'; then \
+		echo "Installing rust target aarch64-unknown-linux-musl..."; \
+		rustup target add aarch64-unknown-linux-musl; \
+	fi
+	@if ! rustup target list | grep -q 'x86_64-unknown-linux-musl (installed)'; then \
+		echo "Installing rust target x86_64-unknown-linux-musl..."; \
+		rustup target add x86_64-unknown-linux-musl; \
+	fi
+	@if ! rustup target list | grep -q 'aarch64-apple-darwin (installed)'; then \
+		echo "Installing rust target aarch64-apple-darwin..."; \
+		rustup target add aarch64-apple-darwin; \
+	fi
 
 build-openwrt:
 	@echo "Cross-compiling bs-edge-agent for aarch64-unknown-linux-musl..."
-	cd runtime/bs-edge-agent && cross build --target aarch64-unknown-linux-musl --release
+	cd runtime/bs-edge-agent && cargo zigbuild --target aarch64-unknown-linux-musl --release
 	@echo "Success! Binary is located at: runtime/bs-edge-agent/target/aarch64-unknown-linux-musl/release/bs-edge-agent"
+
+build-x86_64:
+	@echo "Cross-compiling bs-edge-agent for x86_64-unknown-linux-musl..."
+	cd runtime/bs-edge-agent && cargo zigbuild --target x86_64-unknown-linux-musl --release
+	@echo "Success! Binary is located at: runtime/bs-edge-agent/target/x86_64-unknown-linux-musl/release/bs-edge-agent"
+
+build-macos:
+	@echo "Compiling bs-edge-agent for aarch64-apple-darwin..."
+	cd runtime/bs-edge-agent && cargo build --target aarch64-apple-darwin --release
+	@echo "Success! Binary is located at: runtime/bs-edge-agent/target/aarch64-apple-darwin/release/bs-edge-agent"
+
+build-b0: build-openwrt build-x86_64 build-macos
+	@echo "B0 Build complete."
 
 clean:
 	@echo "Cleaning workspace..."

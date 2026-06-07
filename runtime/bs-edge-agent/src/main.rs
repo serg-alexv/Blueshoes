@@ -91,10 +91,40 @@ fn main() {
                     return;
                 }
             };
-            let dry_run_strings = journal::planner::Planner::dry_run(&profile).unwrap_or_default();
 
-            // Log start
-            let start_event = TransactionEvent::new(tx_id.clone(), TransactionState::Start, Some(format!("{:?}", profile.intent)), Some(dry_run_strings));
+            let force_dry_run = std::env::var("BS_FORCE_DRY_RUN").unwrap_or_else(|_| "0".to_string()) == "1";
+            
+            #[cfg(feature = "dangerous_execution")]
+            let has_dangerous_execution = true;
+            #[cfg(not(feature = "dangerous_execution"))]
+            let has_dangerous_execution = false;
+
+            let refusal_reason = if force_dry_run {
+                Some("BS_FORCE_DRY_RUN=1 environment variable set")
+            } else if !has_dangerous_execution {
+                Some("dangerous_execution feature disabled")
+            } else if !cli.unsafe_execute {
+                Some("missing --unsafe-execute flag")
+            } else if cli.confirm.as_deref().unwrap_or("").starts_with("unsafe:") == false {
+                Some("missing or invalid --confirm unsafe:<request_id>")
+            } else {
+                None
+            };
+
+            if let Some(reason) = refusal_reason {
+                let evidence = journal::planner::Planner::dry_run(&profile, reason).unwrap();
+                println!("{}", serde_json::to_string_pretty(&evidence).unwrap());
+                
+                // Log dry run event
+                let dry_run_strings = vec![serde_json::to_string(&evidence).unwrap()];
+                let start_event = TransactionEvent::new(tx_id, TransactionState::Start, Some(format!("{:?}", profile.intent)), Some(dry_run_strings));
+                let _ = journal::jsonl::append_transaction(&start_event);
+                return;
+            }
+
+            // --- EXECUTION PATH ---
+
+            let start_event = TransactionEvent::new(tx_id.clone(), TransactionState::Start, Some(format!("{:?}", profile.intent)), None);
             let _ = journal::jsonl::append_transaction(&start_event);
             println!("{}", serde_json::to_string_pretty(&start_event).unwrap());
 
@@ -117,11 +147,6 @@ fn main() {
                 .stdin(std::process::Stdio::piped())
                 .spawn()
                 .expect("Failed to spawn bs-watchdog");
-
-            if !cli.unsafe_execute {
-                println!("DRY RUN MODE. To execute, pass the global --unsafe-execute flag.");
-                return;
-            }
 
             println!("Applying plan...");
             if let Err(e) = exec.apply(&plan) {

@@ -4,27 +4,24 @@ Blueshoes is a rollback-safe adaptive networking runtime doctrine and reference 
 
 It operates primarily on OpenWrt-based routers to provide resilient routing, bounded recovery, and deterministic rollback without risking total loss of internet connectivity.
 
-## Active Milestone: M4.1 Safety Containment
+All `bs-edge-agent` execution capabilities are locked behind an explicit double-gate runtime acknowledgement and isolated by a `dangerous_execution` compile-time feature. 
 
-The B0 architecture is governed by strict deterministic planning. **The M4.1 Planner is strictly a planning engine. It does NOT mutate state by default.** 
-
-All `bs-edge-agent` execution capabilities are locked behind an explicit `--unsafe-execute` CLI flag and isolated by a `dangerous_execution` compile-time feature. 
-
-**Default Behavior**:
+**Default Behavior (Dry Run)**:
 ```bash
 bs-edge-agent canary
 ```
-*Outputs a dry-run log of JSON commands. Execution is aborted safely.*
+*Outputs a hashed deterministic dry-run plan containing `plan_sha256`. Execution is aborted safely.*
 
-**Execution Override**:
+**Execution Override (Double Gate)**:
 ```bash
-bs-edge-agent --unsafe-execute canary
+bs-edge-agent --unsafe-execute --confirm unsafe:<request_id> canary
 ```
-*Triggers the actual physical execution of the planned mutation (Only allowed if compiled with `--features dangerous_execution`).*
+Read more in [Phase 1 Scope](docs/rfcs/0012-phase1-scope.md).
 
-## Suggested GitHub “About” (Copy/Paste)
+The project architecture and doctrine are maintained as an RFC corpus. See the [docs/rfcs](docs/rfcs/) directory for the complete doctrine surface.
 
-- **Description**: Transactional networking runtime for OpenWrt routers: observe failures, apply bounded profiles, validate fast, and roll back safely (“Rollback is Sacred”). No MITM. No opaque automation. No bundled paid VPN defaults.
+- [Runtime Doctrine](docs/rfcs/0001-runtime-doctrine.md)
+- [Rollback Model](docs/rfcs/0002-rollback-model.md)
 - **Topics**: openwrt, router, networking, rollback, reliability, rust, dns, ech, edge-computing, observability, censorship-resilience
 
 ## Core Philosophy: Rollback is Sacred

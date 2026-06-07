@@ -6,6 +6,9 @@ pub struct Cli {
     #[arg(long, global = true, default_value_t = false)]
     pub unsafe_execute: bool,
 
+    #[arg(long, global = true)]
+    pub confirm: Option<String>,
+
     #[command(subcommand)]
     pub command: Commands,
 }

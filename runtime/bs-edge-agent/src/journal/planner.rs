@@ -1,32 +1,51 @@
-use crate::profiles::schema::{ProfileSchema, ProfileIntent};
-use serde::{Serialize, Deserialize};
+use crate::profiles::schema::{ProfileIntent, ProfileSchema};
+use serde::{Deserialize, Serialize};
 use std::net::IpAddr;
 
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
-pub enum NftFamily { Inet }
+pub enum NftFamily {
+    Inet,
+}
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
-pub enum NftTable { Filter }
+pub enum NftTable {
+    Filter,
+}
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
-pub enum NftChain { Forward }
+pub enum NftChain {
+    Forward,
+}
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
-pub enum TransportProtocol { Tcp, Udp }
+pub enum TransportProtocol {
+    Tcp,
+    Udp,
+}
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
-pub enum NftAction { Accept, Drop, Reject }
+pub enum NftAction {
+    Accept,
+    Drop,
+    Reject,
+}
 
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 #[serde(tag = "action")]
 pub enum PlanStep {
-    AddRoute { target: String, via: String },
-    FlushRouteCache,
-    AddNftRule { 
-        family: NftFamily,
-        table: NftTable, 
-        chain: NftChain, 
-        protocol: TransportProtocol, 
-        dport: u16, 
-        rule_action: NftAction 
+    AddRoute {
+        target: String,
+        via: String,
     },
-    SetMtu { interface: String, mtu: u32 },
+    FlushRouteCache,
+    AddNftRule {
+        family: NftFamily,
+        table: NftTable,
+        chain: NftChain,
+        protocol: TransportProtocol,
+        dport: u16,
+        rule_action: NftAction,
+    },
+    SetMtu {
+        interface: String,
+        mtu: u32,
+    },
 }
 
 const ALLOWED_INTERFACES: &[&str] = &["pppoe-wan", "wan", "wg0", "br-lan"];
@@ -56,23 +75,24 @@ impl Planner {
                 if let Some(dns) = &profile.dns {
                     for ip_str in &dns.upstream_ips {
                         // Strict input validation: Ensure it is a valid IP address
-                        let ip = ip_str.parse::<IpAddr>()
-                            .map_err(|_| format!("Invalid IP address in DnsPrivacy profile: {}", ip_str))?;
-                        
+                        let ip = ip_str.parse::<IpAddr>().map_err(|_| {
+                            format!("Invalid IP address in DnsPrivacy profile: {}", ip_str)
+                        })?;
+
                         let via = "10.0.0.1".to_string();
                         if !is_valid_interface_or_ip(&via) {
                             return Err(format!("Invalid via interface/IP: {}", via));
                         }
-                        steps.push(PlanStep::AddRoute { 
-                            target: ip.to_string(), 
-                            via 
+                        steps.push(PlanStep::AddRoute {
+                            target: ip.to_string(),
+                            via,
                         });
                     }
                     // Add safe NFT rule
-                    steps.push(PlanStep::AddNftRule { 
+                    steps.push(PlanStep::AddNftRule {
                         family: NftFamily::Inet,
-                        table: NftTable::Filter, 
-                        chain: NftChain::Forward, 
+                        table: NftTable::Filter,
+                        chain: NftChain::Forward,
                         protocol: TransportProtocol::Tcp,
                         dport: 853,
                         rule_action: NftAction::Accept,
@@ -82,10 +102,10 @@ impl Planner {
                 }
             }
             ProfileIntent::EchPreserve => {
-                steps.push(PlanStep::AddNftRule { 
+                steps.push(PlanStep::AddNftRule {
                     family: NftFamily::Inet,
-                    table: NftTable::Filter, 
-                    chain: NftChain::Forward, 
+                    table: NftTable::Filter,
+                    chain: NftChain::Forward,
                     protocol: TransportProtocol::Tcp,
                     dport: 443,
                     rule_action: NftAction::Accept,
@@ -96,9 +116,9 @@ impl Planner {
                 if !is_valid_interface_or_ip(&via) {
                     return Err(format!("Invalid via interface/IP: {}", via));
                 }
-                steps.push(PlanStep::AddRoute { 
-                    target: "0.0.0.0/0".to_string(), 
-                    via 
+                steps.push(PlanStep::AddRoute {
+                    target: "0.0.0.0/0".to_string(),
+                    via,
                 });
             }
             ProfileIntent::SafeMtu => {
@@ -106,9 +126,9 @@ impl Planner {
                 if !is_valid_interface_or_ip(&interface) {
                     return Err(format!("Invalid interface: {}", interface));
                 }
-                steps.push(PlanStep::SetMtu { 
-                    interface, 
-                    mtu: 1492 
+                steps.push(PlanStep::SetMtu {
+                    interface,
+                    mtu: 1492,
                 });
             }
             ProfileIntent::RecoverySafeMode => {
@@ -119,15 +139,21 @@ impl Planner {
         Ok(steps)
     }
 
-    pub fn dry_run(profile: &ProfileSchema, refusal_reason: &str) -> Result<DryRunEvidence, String> {
-        use sha2::{Sha256, Digest};
+    pub fn dry_run(
+        profile: &ProfileSchema,
+        refusal_reason: &str,
+    ) -> Result<DryRunEvidence, String> {
+        use sha2::{Digest, Sha256};
         let steps = Self::plan(profile)?;
-        
+
         let steps_json = serde_json::to_string(&steps).map_err(|e| e.to_string())?;
         let mut hasher = Sha256::new();
         hasher.update(steps_json.as_bytes());
         let hash_result = hasher.finalize();
-        let plan_sha256 = hash_result.iter().map(|b| format!("{:02x}", b)).collect::<String>();
+        let plan_sha256 = hash_result
+            .iter()
+            .map(|b| format!("{:02x}", b))
+            .collect::<String>();
 
         Ok(DryRunEvidence {
             execution_mode: "dry_run".to_string(),
@@ -151,9 +177,9 @@ mod tests {
             name: "test".to_string(),
             description: "test".to_string(),
             intent: ProfileIntent::DnsPrivacy,
-            dns: Some(DnsAction { 
+            dns: Some(DnsAction {
                 upstream_ips: vec!["1.1.1.1".to_string(), "9.9.9.9".to_string()],
-                dot_hostname: None, 
+                dot_hostname: None,
             }),
             routes: None,
         };
@@ -167,7 +193,7 @@ mod tests {
             name: "test".to_string(),
             description: "test".to_string(),
             intent: ProfileIntent::DnsPrivacy,
-            dns: Some(DnsAction { 
+            dns: Some(DnsAction {
                 upstream_ips: vec!["1.1.1.1".to_string(), "invalid_ip; rm -rf /".to_string()],
                 dot_hostname: None,
             }),

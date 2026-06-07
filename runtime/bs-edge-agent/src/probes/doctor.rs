@@ -1,6 +1,6 @@
+use crate::probes::TelemetryEvent;
 use serde_json::json;
 use std::fs;
-use crate::probes::TelemetryEvent;
 
 pub fn run() -> TelemetryEvent {
     let mut status = "ok";
@@ -26,9 +26,14 @@ pub fn run() -> TelemetryEvent {
         status = "warning_not_openwrt";
     }
 
-    TelemetryEvent::new("doctor", status, 0, json!({
-        "openwrt_readable": openwrt_readable,
-        "dev_urandom_readable": dev_urandom_readable,
-        "is_root": is_root,
-    }))
+    TelemetryEvent::new(
+        "doctor",
+        status,
+        0,
+        json!({
+            "openwrt_readable": openwrt_readable,
+            "dev_urandom_readable": dev_urandom_readable,
+            "is_root": is_root,
+        }),
+    )
 }

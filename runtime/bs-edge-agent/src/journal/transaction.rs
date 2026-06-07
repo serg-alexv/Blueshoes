@@ -1,5 +1,5 @@
-use serde::{Deserialize, Serialize};
 use crate::probes::TelemetryEvent;
+use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(rename_all = "snake_case")]
@@ -23,10 +23,17 @@ pub struct TransactionEvent {
 }
 
 impl TransactionEvent {
-    pub fn new(transaction_id: String, state: TransactionState, intent: Option<String>, dry_run_plan: Option<Vec<String>>) -> Self {
+    pub fn new(
+        transaction_id: String,
+        state: TransactionState,
+        intent: Option<String>,
+        dry_run_plan: Option<Vec<String>>,
+    ) -> Self {
         use std::time::{SystemTime, UNIX_EPOCH};
         let start = SystemTime::now();
-        let since_the_epoch = start.duration_since(UNIX_EPOCH).expect("Time went backwards");
+        let since_the_epoch = start
+            .duration_since(UNIX_EPOCH)
+            .expect("Time went backwards");
 
         Self {
             timestamp_utc: since_the_epoch.as_secs(),

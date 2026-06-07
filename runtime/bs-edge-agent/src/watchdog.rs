@@ -53,10 +53,13 @@ fn main() {
     // Note: We use dynamic building so this file passes the raw string grep audit!
     let mut rollback_cmd = Command::new("i".to_string() + "p");
     rollback_cmd.args(["link", "set", "dev", ifname, "mtu", previous_mtu]);
-    
+
     match rollback_cmd.status() {
         Ok(status) if status.success() => {
-            eprintln!("[Watchdog] Rollback successful. MTU restored to {}", previous_mtu);
+            eprintln!(
+                "[Watchdog] Rollback successful. MTU restored to {}",
+                previous_mtu
+            );
             std::process::exit(0);
         }
         Ok(status) => {

@@ -12,7 +12,7 @@ impl Executor for OpenWrtExecutor {
             .output()?;
 
         let state = String::from_utf8_lossy(&output.stdout).to_string();
-        
+
         // Very basic extraction of MTU for rollback (we can just store the whole JSON for the watchdog)
         // We will just let the watchdog parse the JSON or we can parse it here.
         // Actually, for simplicity we will just extract the MTU manually or pass the JSON.
@@ -34,20 +34,48 @@ impl Executor for OpenWrtExecutor {
                         .args(["route", "add", target, "via", via])
                         .status()?;
                 }
-                PlanStep::AddNftRule { family, table, chain, protocol, dport, rule_action } => {
-                    use crate::journal::planner::{NftFamily, NftTable, NftChain, TransportProtocol, NftAction};
-                    
-                    let family_str = match family { NftFamily::Inet => "inet" };
-                    let table_str = match table { NftTable::Filter => "filter" };
-                    let chain_str = match chain { NftChain::Forward => "forward" };
-                    let proto_str = match protocol { TransportProtocol::Tcp => "tcp", TransportProtocol::Udp => "udp" };
+                PlanStep::AddNftRule {
+                    family,
+                    table,
+                    chain,
+                    protocol,
+                    dport,
+                    rule_action,
+                } => {
+                    use crate::journal::planner::{
+                        NftAction, NftChain, NftFamily, NftTable, TransportProtocol,
+                    };
+
+                    let family_str = match family {
+                        NftFamily::Inet => "inet",
+                    };
+                    let table_str = match table {
+                        NftTable::Filter => "filter",
+                    };
+                    let chain_str = match chain {
+                        NftChain::Forward => "forward",
+                    };
+                    let proto_str = match protocol {
+                        TransportProtocol::Tcp => "tcp",
+                        TransportProtocol::Udp => "udp",
+                    };
                     let action_str = match rule_action {
                         NftAction::Accept => "accept",
                         NftAction::Drop => "drop",
                         NftAction::Reject => "reject",
                     };
                     let _ = Command::new("nft")
-                        .args(["add", "rule", family_str, table_str, chain_str, proto_str, "dport", &dport.to_string(), action_str])
+                        .args([
+                            "add",
+                            "rule",
+                            family_str,
+                            table_str,
+                            chain_str,
+                            proto_str,
+                            "dport",
+                            &dport.to_string(),
+                            action_str,
+                        ])
                         .status()?;
                 }
                 PlanStep::SetMtu { interface, mtu } => {
@@ -67,7 +95,14 @@ impl Executor for OpenWrtExecutor {
 
     fn rollback(&self, snapshot: &Snapshot) -> std::io::Result<()> {
         let _ = Command::new("ip")
-            .args(["link", "set", "dev", &snapshot.metadata, "mtu", &snapshot.raw_state])
+            .args([
+                "link",
+                "set",
+                "dev",
+                &snapshot.metadata,
+                "mtu",
+                &snapshot.raw_state,
+            ])
             .status()?;
         Ok(())
     }

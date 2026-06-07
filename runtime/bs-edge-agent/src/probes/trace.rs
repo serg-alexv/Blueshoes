@@ -1,6 +1,6 @@
+use crate::probes::TelemetryEvent;
 use serde_json::json;
 use std::process::Command;
-use crate::probes::TelemetryEvent;
 use std::time::Instant;
 
 pub fn run(target: &str) -> TelemetryEvent {
@@ -32,8 +32,13 @@ pub fn run(target: &str) -> TelemetryEvent {
 
     let duration_ms = start.elapsed().as_millis() as u64;
 
-    TelemetryEvent::new("trace", status, duration_ms, json!({
-        "target": target,
-        "output": trace_output,
-    }))
+    TelemetryEvent::new(
+        "trace",
+        status,
+        duration_ms,
+        json!({
+            "target": target,
+            "output": trace_output,
+        }),
+    )
 }

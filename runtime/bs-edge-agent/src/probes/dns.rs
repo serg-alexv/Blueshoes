@@ -17,6 +17,7 @@ pub fn run(target: &str) -> TelemetryEvent {
                 resolved_ips.push(addr.ip().to_string());
             }
             evidence["resolved_ips"] = json!(resolved_ips);
+            evidence["timing_ms"] = json!(start.elapsed().as_millis() as u64);
 
             let status = if !resolved_ips.is_empty() {
                 "ok"

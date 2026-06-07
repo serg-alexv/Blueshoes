@@ -1,12 +1,13 @@
 pub mod dns;
-pub mod https;
-pub mod icmp;
-pub mod route;
-pub mod system;
 pub mod doctor;
 pub mod env;
+pub mod https;
+pub mod icmp;
+pub mod interface;
+pub mod mtu;
+pub mod route;
+pub mod system;
 pub mod trace;
-
 
 use serde::Serialize;
 use serde_json::Value;

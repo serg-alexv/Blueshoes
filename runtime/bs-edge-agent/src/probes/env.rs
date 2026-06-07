@@ -1,6 +1,6 @@
+use crate::probes::TelemetryEvent;
 use serde_json::json;
 use std::env;
-use crate::probes::TelemetryEvent;
 
 pub fn run() -> TelemetryEvent {
     let mut safe_env = serde_json::Map::new();

@@ -25,10 +25,7 @@ pub fn append_transaction(event: &crate::journal::transaction::TransactionEvent)
 
 fn append_serializable<T: serde::Serialize>(event: &T) -> io::Result<()> {
     let path = get_journal_path();
-    let mut file = OpenOptions::new()
-        .create(true)
-        .append(true)
-        .open(path)?;
+    let mut file = OpenOptions::new().create(true).append(true).open(path)?;
 
     let json = serde_json::to_string(event)?;
     writeln!(file, "{}", json)

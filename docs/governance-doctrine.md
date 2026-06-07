@@ -106,3 +106,33 @@ These capabilities are tools, not authorities. No tool may become a runtime depe
 ### Local Tooling
 - **GitHub Copilot**: Approved for autocomplete, boilerplate, and test scaffolding. Forbidden from architecture authority.
 - **Trae**: Implementation executor only. May edit repo within SPEC scope and generate bundles. May NOT change doctrine without SPEC or push without AGY gate.
+
+## 9. DELEGATED CAPABILITY RUNTIME (MECHA)
+
+### The Delegated Executor Rule
+A mechanical executor (**MECHA** - Mechanical Execution Capability Handler) may perform bounded operational steps **only when consuming a human-signed capability grant**. The executor is never a human, never an authority, never a doctrine source, and never a router decision-maker. It may hold operational credentials only inside a revocable secret boundary and only for commands explicitly enumerated by the grant.
+
+### The Authority Equation
+- **Authority(Human)** = root
+- **Authority(AGY)** = validate(spec, bundle, doctrine)
+- **Authority(MECHA)** = execute(capability) iff capability is valid
+
+`valid(capability)` := signed_by_human ∧ matches_SPEC_hash ∧ command ∈ allowlist ∧ target ∈ allowed_targets ∧ expires_at > now ∧ rollback_defined ∧ max_risk_class not exceeded ∧ evidence_output_required
+
+### MECHA Must Be Boring
+**Allowed Capabilities:**
+- copy package
+- run read-only probes
+- collect logs
+- upload evidence
+- format bundle
+- report failure
+
+**Forbidden Behaviors:**
+- decide release safety
+- change doctrine
+- edit unsafe gates
+- invent commands
+- mutate router config
+- hold permanent broad credentials
+- continue after unexpected output

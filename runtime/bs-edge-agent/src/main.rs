@@ -88,12 +88,7 @@ fn main() {
             let dry_run_strings = journal::planner::Planner::dry_run(&profile);
 
             // Log start
-            let mut start_event = TransactionEvent::new(tx_id.clone(), TransactionState::Start, Some(format!("{:?}", profile.intent)), Some(dry_run_strings));
-            start_event.mutation_performed = false; // We default to false until we verify
-            #[cfg(feature = "dangerous_execution")]
-            {
-                start_event.mutation_performed = true;
-            }
+            let start_event = TransactionEvent::new(tx_id.clone(), TransactionState::Start, Some(format!("{:?}", profile.intent)), Some(dry_run_strings));
             let _ = journal::jsonl::append_transaction(&start_event);
             println!("{}", serde_json::to_string_pretty(&start_event).unwrap());
 

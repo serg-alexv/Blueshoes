@@ -35,6 +35,7 @@ impl TransactionEvent {
             state,
             intent,
             dry_run_plan,
+            // STRICT M2 CONSTRAINT: Always false until mutation milestones
             mutation_performed: false,
         }
     }

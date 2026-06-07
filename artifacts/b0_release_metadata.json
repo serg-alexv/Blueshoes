@@ -1,22 +1,22 @@
 {
   "milestone": "B0",
-  "build_date_utc": "2026-06-07T05:19:00Z",
-  "git_commit": "7781f176cf49b242d81d8667a708e66092177a50",
+  "build_date_utc": "2026-06-07T05:47:30Z",
+  "git_commit": "013fcef8572ecbc152a4986ab48ddfde451a5273",
   "toolchain": {
     "rust": "rustc 1.96.0 (ac68faa20 2026-05-25)",
     "cargo_zigbuild": "cargo-zigbuild 0.22.3"
   },
   "targets": {
     "aarch64-unknown-linux-musl": {
-      "bs-edge-agent": {"path": "runtime/bs-edge-agent/target/aarch64-unknown-linux-musl/release/bs-edge-agent", "size": 1840488, "sha256": "d50715456f26fc7f3831af474c78393a52241d61ee05b0dbdc2c0cfdd23e31b1"},
+      "bs-edge-agent": {"path": "runtime/bs-edge-agent/target/aarch64-unknown-linux-musl/release/bs-edge-agent", "size": 1840488, "sha256": "0aac2f3d1bb176760c5947eb4ca5353ccbdabf7fc14f13e5127be5611272d671"},
       "bs-watchdog": {"path": "runtime/bs-edge-agent/target/aarch64-unknown-linux-musl/release/bs-watchdog", "size": 392752, "sha256": "f57320c5017d78dcb6fac33d05cc9ce1e36d2e8e958b268d6ae945e2365a940c"}
     },
     "x86_64-unknown-linux-musl": {
-      "bs-edge-agent": {"path": "runtime/bs-edge-agent/target/x86_64-unknown-linux-musl/release/bs-edge-agent", "size": 2146152, "sha256": "e43949762df1b3b84b2f3051a849ede7c87d0314aa72eecc8900ff09aa806ce1"},
+      "bs-edge-agent": {"path": "runtime/bs-edge-agent/target/x86_64-unknown-linux-musl/release/bs-edge-agent", "size": 2146152, "sha256": "d3a1d80f9c4aa00c1ee5428878cfc3838299cff3f7520e0c0d93f072fe016a06"},
       "bs-watchdog": {"path": "runtime/bs-edge-agent/target/x86_64-unknown-linux-musl/release/bs-watchdog", "size": 418312, "sha256": "8fc35869609993e8a591549df5390196d228ba63e545344c7310ab03c6c75aed"}
     },
     "aarch64-apple-darwin": {
-      "bs-edge-agent": {"path": "runtime/bs-edge-agent/target/aarch64-apple-darwin/release/bs-edge-agent", "size": 1668368, "sha256": "0b53efd673eb2409300d0b7e6bea00d7a19371212632c8c1ac32f68b1853e436"},
+      "bs-edge-agent": {"path": "runtime/bs-edge-agent/target/aarch64-apple-darwin/release/bs-edge-agent", "size": 1668368, "sha256": "45637d9a11ce6d015b2860fc5808049ba8d4b1fcfae82f2e52d2bef908ab9bd7"},
       "bs-watchdog": {"path": "runtime/bs-edge-agent/target/aarch64-apple-darwin/release/bs-watchdog", "size": 354896, "sha256": "a77ba347e63f45531fbe9c6333f4562d4de013458231d98e5a74f5343ae5101d"}
     }
   }

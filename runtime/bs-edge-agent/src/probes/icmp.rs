@@ -9,22 +9,20 @@ pub fn run(target: &str) -> TelemetryEvent {
     evidence["target"] = json!(target);
 
     // Read-only ICMP ping command
-    // Using platform-specific ping flags: -c 1 (count 1), -W 2 (timeout 2s) for Linux/macOS
+    // Strictly OpenWrt/Linux target flags
     let mut cmd = Command::new("ping");
-    
-    // Check if on macOS (Darwin) vs Linux, as macOS ping uses -W differently (milliseconds vs seconds) or -t for timeout
-    if cfg!(target_os = "macos") {
-        cmd.args(["-c", "1", "-W", "2000", target]);
-    } else {
-        cmd.args(["-c", "1", "-W", "2", target]);
-    }
+    cmd.args(["-c", "1", "-W", "2", target]);
 
     match cmd.output() {
         Ok(output) => {
             let stdout = String::from_utf8_lossy(&output.stdout).to_string();
             evidence["stdout"] = json!(stdout);
 
-            let status = if output.status.success() { "ok" } else { "fail" };
+            let status = if output.status.success() {
+                "ok"
+            } else {
+                "fail"
+            };
             if !output.status.success() {
                 evidence["stderr"] = json!(String::from_utf8_lossy(&output.stderr).to_string());
             }

@@ -11,14 +11,18 @@ pub fn run(target: &str) -> TelemetryEvent {
     // Using Rust's standard library resolver (blocks, but lightweight and read-only)
     let addr_str = format!("{}:80", target);
     match addr_str.to_socket_addrs() {
-        Ok(mut addrs) => {
+        Ok(addrs) => {
             let mut resolved_ips = Vec::new();
-            while let Some(addr) = addrs.next() {
+            for addr in addrs {
                 resolved_ips.push(addr.ip().to_string());
             }
             evidence["resolved_ips"] = json!(resolved_ips);
-            
-            let status = if !resolved_ips.is_empty() { "ok" } else { "warn" };
+
+            let status = if !resolved_ips.is_empty() {
+                "ok"
+            } else {
+                "warn"
+            };
             if resolved_ips.is_empty() {
                 evidence["error"] = json!("Resolved to empty IP list");
             }

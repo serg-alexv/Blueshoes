@@ -8,7 +8,7 @@ pub fn run() -> TelemetryEvent {
     let mut evidence = json!({});
 
     evidence["os"] = json!(read_os_release());
-    
+
     let (total, free) = read_meminfo();
     evidence["mem_total_kb"] = json!(total);
     evidence["mem_free_kb"] = json!(free);
@@ -17,7 +17,12 @@ pub fn run() -> TelemetryEvent {
 
     let status = if total.is_some() { "ok" } else { "warn" };
 
-    TelemetryEvent::new("system", status, start.elapsed().as_millis() as u64, evidence)
+    TelemetryEvent::new(
+        "system",
+        status,
+        start.elapsed().as_millis() as u64,
+        evidence,
+    )
 }
 
 fn read_meminfo() -> (Option<u64>, Option<u64>) {
@@ -49,20 +54,33 @@ fn parse_kb(line: &str) -> Option<u64> {
 }
 
 fn read_loadavg() -> Option<f64> {
-    let Ok(contents) = fs::read_to_string("/proc/loadavg") else { return None; };
-    contents.split_whitespace().next().and_then(|s| s.parse::<f64>().ok())
+    let Ok(contents) = fs::read_to_string("/proc/loadavg") else {
+        return None;
+    };
+    contents
+        .split_whitespace()
+        .next()
+        .and_then(|s| s.parse::<f64>().ok())
 }
 
 fn read_uptime() -> Option<f64> {
-    let Ok(contents) = fs::read_to_string("/proc/uptime") else { return None; };
-    contents.split_whitespace().next().and_then(|s| s.parse::<f64>().ok())
+    let Ok(contents) = fs::read_to_string("/proc/uptime") else {
+        return None;
+    };
+    contents
+        .split_whitespace()
+        .next()
+        .and_then(|s| s.parse::<f64>().ok())
 }
 
 fn read_os_release() -> String {
     if let Ok(contents) = fs::read_to_string("/etc/os-release") {
         for line in contents.lines() {
             if line.starts_with("PRETTY_NAME=") {
-                return line.trim_start_matches("PRETTY_NAME=").trim_matches('"').to_string();
+                return line
+                    .trim_start_matches("PRETTY_NAME=")
+                    .trim_matches('"')
+                    .to_string();
             }
         }
     }

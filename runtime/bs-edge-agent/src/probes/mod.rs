@@ -1,8 +1,8 @@
-pub mod system;
-pub mod route;
 pub mod dns;
-pub mod icmp;
 pub mod https;
+pub mod icmp;
+pub mod route;
+pub mod system;
 
 use serde::Serialize;
 use serde_json::Value;
@@ -35,5 +35,23 @@ impl TelemetryEvent {
             evidence,
             mutation_performed: false, // Strict compliance with M1 spec
         }
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use serde_json::json;
+
+    #[test]
+    fn test_telemetry_event_mutation_flag() {
+        let event = TelemetryEvent::new("test", "ok", 10, json!({"msg": "test"}));
+
+        // Assert native struct enforcement
+        assert!(!event.mutation_performed);
+
+        // Assert JSON serialization includes the constraint
+        let serialized = serde_json::to_string(&event).unwrap();
+        assert!(serialized.contains(r#""mutation_performed":false"#));
     }
 }

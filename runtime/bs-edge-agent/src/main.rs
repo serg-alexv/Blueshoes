@@ -1,6 +1,6 @@
 mod cli;
-mod probes;
 mod journal;
+mod probes;
 
 use clap::Parser;
 use cli::{Cli, Commands};

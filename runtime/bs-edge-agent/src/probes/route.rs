@@ -6,7 +6,7 @@ use std::time::Instant;
 pub fn run() -> TelemetryEvent {
     let start = Instant::now();
     let mut evidence = json!({});
-    
+
     // Explicit read-only command
     match Command::new("ip").args(["route", "show"]).output() {
         Ok(output) => {
@@ -22,16 +22,30 @@ pub fn run() -> TelemetryEvent {
             }
             evidence["default_route"] = json!(default_route);
 
-            let status = if output.status.success() { "ok" } else { "warn" };
+            let status = if output.status.success() {
+                "ok"
+            } else {
+                "warn"
+            };
             if !output.status.success() {
                 evidence["stderr"] = json!(String::from_utf8_lossy(&output.stderr).to_string());
             }
-            
-            TelemetryEvent::new("route", status, start.elapsed().as_millis() as u64, evidence)
+
+            TelemetryEvent::new(
+                "route",
+                status,
+                start.elapsed().as_millis() as u64,
+                evidence,
+            )
         }
         Err(e) => {
             evidence["error"] = json!(e.to_string());
-            TelemetryEvent::new("route", "fail", start.elapsed().as_millis() as u64, evidence)
+            TelemetryEvent::new(
+                "route",
+                "fail",
+                start.elapsed().as_millis() as u64,
+                evidence,
+            )
         }
     }
 }

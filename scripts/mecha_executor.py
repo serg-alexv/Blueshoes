@@ -3,6 +3,8 @@ import sys
 import json
 import datetime
 import subprocess
+
+SSH_OPTS = ["-o", "BatchMode=yes", "-o", "ConnectTimeout=5", "-o", "StrictHostKeyChecking=accept-new"]
 import argparse
 import os
 
@@ -115,15 +117,15 @@ def main():
         
         real_cmd = []
         if action == "scp_binary_to_tmp":
-            real_cmd = ["scp", "runtime/bs-edge-agent/target/aarch64-unknown-linux-musl/release/bs-edge-agent", f"root@{target_ip}:/tmp/bs-edge-agent"]
+            real_cmd = ["scp", "-O"] + SSH_OPTS + ["runtime/bs-edge-agent/target/aarch64-unknown-linux-musl/release/bs-edge-agent", f"root@{target_ip}:/tmp/bs-edge-agent"]
         elif action == "ssh_run_status":
-            real_cmd = ["ssh", "-o", "ConnectTimeout=5", f"root@{target_ip}", "/tmp/bs-edge-agent status --json"]
+            real_cmd = ["ssh"] + SSH_OPTS + [f"root@{target_ip}", "/tmp/bs-edge-agent status --json"]
         elif action == "ssh_run_netcheck":
-            real_cmd = ["ssh", "-o", "ConnectTimeout=5", f"root@{target_ip}", "/tmp/bs-edge-agent netcheck --json"]
+            real_cmd = ["ssh"] + SSH_OPTS + [f"root@{target_ip}", "/tmp/bs-edge-agent netcheck --json"]
         elif action == "ssh_read_journal_tail":
-            real_cmd = ["ssh", "-o", "ConnectTimeout=5", f"root@{target_ip}", "/tmp/bs-edge-agent journal --tail 10"]
+            real_cmd = ["ssh"] + SSH_OPTS + [f"root@{target_ip}", "/tmp/bs-edge-agent journal --tail 10"]
         elif action == "ssh_collect_router_facts":
-            real_cmd = ["ssh", "-o", "ConnectTimeout=5", f"root@{target_ip}", "/tmp/bs-edge-agent facts --json"]
+            real_cmd = ["ssh"] + SSH_OPTS + [f"root@{target_ip}", "/tmp/bs-edge-agent facts --json"]
         else:
             res = {"action": action, "status": "UNKNOWN_ACTION"}
             evidence["actions_attempted"].append(res)

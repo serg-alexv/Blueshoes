@@ -15,15 +15,19 @@ It is NOT an AI agent. It is a local wrapper operated by the human principal.
 ## Usage
 
 ### Dry Run (Safe)
+
 ```bash
 python3 scripts/mecha_executor.py examples/mecha/synthetic-grant.json
 ```
+
 or explicitly:
+
 ```bash
 python3 scripts/mecha_executor.py examples/mecha/synthetic-grant.json --dry-run
 ```
 
 ### Live Execution (Unsafe)
+
 To execute a live grant (e.g., `artifacts/devship/m5-smoke-test-grant.live.json`):
 
 ```bash
@@ -47,4 +51,5 @@ The `actions` array in the capability grant supports strictly these typed operat
 Any unknown action is immediately rejected.
 
 ## Evidence Output
+
 All executions (dry-run or live) output deterministic JSON evidence to `artifacts/devship/mecha-evidence/<request_id>.json`. This file must be reviewed before advancing milestone stages.

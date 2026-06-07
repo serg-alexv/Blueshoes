@@ -1,0 +1,15 @@
+{
+  "request_id": "test-002",
+  "started_at_utc": "2026-06-07T10:40:33.473295+00:00",
+  "dry_run": true,
+  "mutation_performed": false,
+  "operator_required": true,
+  "redaction_status": "enabled",
+  "actions_attempted": [
+    {
+      "action": "ssh_rm_rf_slash",
+      "status": "UNKNOWN_ACTION"
+    }
+  ],
+  "finished_at_utc": "2026-06-07T10:40:33.473318+00:00"
+}

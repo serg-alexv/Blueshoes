@@ -1,14 +1,12 @@
-# Diagnostic LLM Boundary
+# The LLM Boundary
 
-**Definition:** Let $L$ be the Large Language Model algorithm operating over a local context window. Let $E$ be the operational routing space.
+To prevent unpredictable system behavior, Blueshoes establishes a strict "air gap" between the Large Language Model and the router's execution environment.
 
 ## Physical Isolation
-**Condition (Necessary):** $L \notin E$. The intersection of the LLM memory footprint and the router's 512MB RAM pool must be the null set $\emptyset$.
+The LLM does not exist on the router. Running models like `llama.cpp` on 512MB RAM causes severe memory swapping, killing the router's ability to forward packets. The LLM lives exclusively on the external Workbench.
 
-## Logical Isolation
-**Condition (Necessary):** $L$ is strictly read-only relative to $E$.
-**Condition (Sufficient):** $L(E_{telemetry}) \to \{report, P_{suggest}\}$.
+## Read-Only Execution
+The LLM operates in a strictly read-only capacity. It parses telemetry data (connection drops, DPI signatures) and suggests a static profile to switch to. 
 
-## Forbidden Operations Set
-$L$ shall never execute elements of set $F_{shell} = \{\text{iptables}, \text{nft}, \text{ip route}, \text{uci}, \text{opkg}, \text{sh}\}$.
-The equation $L \to \text{shell}$ evaluates to $\text{false}$ under all operational conditions.
+## No Shell Access
+Under no circumstances is the LLM allowed to generate and execute shell commands (`iptables`, `sh`, `uci`) on the router. Bypassing the static profiles to let an AI write firewall rules dynamically is an unacceptable security and stability risk.

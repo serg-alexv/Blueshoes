@@ -1,22 +1,17 @@
-# Registry of Universal Constraints
+# Operational Registries
 
-**Definition:** The foundational matrix of logical constraints governing all pull requests and state changes.
+This document outlines the core constraints that govern all pull requests and architectural decisions for Blueshoes.
 
-## Structural Sets
+## 1. Hardware & Compilation
+- **Target**: GL-MT3000 (OpenWrt).
+- **Language**: Memory-safe preferred (Rust or Go). Final selection depends on passing footprint targets.
+- **Budgets**: Targeting < 15MB RAM and < 5MB Flash.
 
-1. **Hardware $H_{target}$**
-   - $RAM_{max} \le 15\text{MB}$
-   - $Flash_{max} \le 5\text{MB}$
-2. **Language Compilation $L_{comp}$**
-   - Rust (`#![no_std]` or `-C opt-level=z`)
-3. **Architecture Bifurcation $\{A, C\}$**
-   - $E$ (Edge, Router): Strict determinism.
-   - $W$ (Workbench, External): LLM Analysis.
+## 2. Architecture Constraints
+- **Bifurcation**: Heavy analysis happens on the Workbench; deterministic execution happens on the Edge Agent.
+- **Rollback Speed**: Profile rollbacks must complete in under 5 seconds.
+- **Clean Exit**: Stopping the daemon must fully restore normal routing.
 
-## Axiomatic Invariants (Theorems)
-
-- **C1:** Rollback atomicity $t \le 5\text{s}$.
-- **C2:** $E_{\text{off}} \to S_{\text{vanilla}}$ (Base routing must be restored upon exit).
-- **C3:** $M(T) \ne \text{Decryption}$ (No MITM).
-- **C4:** $L \notin E$ (No LLMs on the router).
-- **C5:** $L \to \text{shell} = \text{false}$ (LLM cannot issue system commands).
+## 3. Security Limits
+- **No MITM**: Decryption of TLS traffic by the router is forbidden.
+- **No LLM Shell Access**: The LLM cannot write or execute shell commands on the router.

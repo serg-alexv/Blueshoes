@@ -1,9 +1,8 @@
-# Out-of-Band Diagnostic Tool Constraint
+# Out-of-Band Lab Tools
 
-**Definition:** Let $D_{lab}$ be the set of deep-inspection diagnostic tools (e.g., Charles Proxy, mitmproxy). 
+While deep-inspection tools like Charles Proxy or mitmproxy are useful for debugging, they violate the core MITM Ban if run transparently on the router.
 
-## Boundary Condition
-**Condition (Necessary):** The intersection $D_{lab} \cap E$ must be the null set $\emptyset$. Deep-inspection tools shall not exist on the router hardware.
-
-## Execution Condition
-**Condition (Sufficient):** $D_{lab}$ may execute exclusively within $W_{remote}$ provided that client $C_{end}$ executes an explicit, manual opt-in vector (e.g., manual SOCKS configuration) confirming mutual agreement. Ephemeral diagnostic certificates $C_{eph}$ must satisfy the condition $\text{Lifespan}(C_{eph}) \to 0$ upon session termination.
+## Execution Rules
+- These tools **must not** be installed on the router hardware.
+- They may be executed on the external Workbench VM solely for lab analysis.
+- If used, the client device must explicitly opt-in (e.g., by manually configuring a SOCKS proxy in their OS). We never hijack traffic transparently for deep inspection.

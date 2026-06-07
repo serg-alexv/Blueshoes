@@ -1,14 +1,12 @@
-# Resource Boundary Condition (MT-3000)
+# Hardware Budgets: MT-3000 Target
 
-**Definition:** The target hardware constant $H_{target}$ is defined as MediaTek MT7981B, bounded by $RAM_{total} = 512\text{MB}$ and $Flash_{total} = 256\text{MB}$.
+For Phase 1, we are targeting the GL.iNet GL-MT3000 (MediaTek MT7981B). The router has 512MB RAM and 256MB Flash, but we must leave the vast majority of these resources free for base OpenWrt routing and system upgrades.
 
-## Hard Thresholds
-Let $E$ be the resident edge-agent process.
-1. **Memory Condition (Necessary):** $RAM_{E} \le 15\text{MB}$. Failure to satisfy this inequality triggers fatal OOM under connection load $C_{high}$.
-2. **Storage Condition (Necessary):** $Flash_{E} \le 5\text{MB}$. This ensures the residual variable $\Delta_{sysupgrade}$ remains mathematically positive for OpenWrt updates.
-3. **CPU Condition (Necessary):** $CPU_{E_{idle}} < 1\%$.
-4. **CPU Condition (Mutation):** $CPU_{E_{mut}} < 15\%$, limited to interval $t < 5\text{s}$.
-5. **Database Condition (Necessary):** Size of telemetry store $D_{SQLite} \le 2\text{MB}$. Enforced via FIFO log truncation.
+## Hypothesized Footprint Targets
+To ensure Blueshoes operates invisibly without causing Out-of-Memory (OOM) events or filling the flash drive, we are aiming for the following budgets for the `bs-edge-agent`:
 
-## Corollary
-Given the aforementioned thresholds, $L \in H_{target}$ evaluates to $\text{false}$. Local LLM execution is structurally invalid. Language compilation for $E$ must strictly optimize for size (Rust `#![no_std]` or `-C opt-level=z`), rendering runtime-heavy languages (Go, Python) invalid.
+1. **RAM Target**: $< 15\text{MB}$ during idle and observation.
+2. **Flash Target**: $< 5\text{MB}$ to ensure `sysupgrade` doesn't fail.
+3. **Database Limit**: Local SQLite telemetry logs should be capped at $2\text{MB}$ via FIFO truncation.
+
+*Note: These are operational hypotheses. Final language choice (Rust vs Go) and compilation flags will be determined once we begin footprint profiling on the physical hardware.*

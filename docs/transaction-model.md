@@ -1,13 +1,14 @@
-# Atomic Transaction Function
+# The Atomic Transaction Model
 
-**Definition:** The mutation of routing state $S_n \to S_{n+1}$ is an atomic operation governed by a rigid temporal constraint $t_{max}$.
+Modifying router state (`iptables`, `nftables`, `ip route`) is inherently dangerous. If a script applies a bad rule, the router drops offline permanently. Blueshoes solves this by treating network configuration as an atomic transaction.
 
-## Stepwise Execution
-1. **Snapshot ($S_{n}$):** Current stable state is defined and cached in local RAM.
-2. **Apply ($S_{temp}$):** Target profile rules $P_x$ are injected into kernel routing tables.
-3. **Validate ($V$):** A synthetic HTTP GET request (Canary) is dispatched. Let $t_v$ be the response time.
-4. **Decision Matrix:**
-   - If $V = \text{HTTP 200}$ and $t_v \le 3\text{s}$, execute $\text{Commit}(S_{temp} \to S_{n+1})$.
-   - If $V \ne \text{HTTP 200}$ or $t_v > 3\text{s}$, execute $\text{Rollback}(S_{temp} \to S_n)$.
+## The Execution Flow
 
-**Condition (Necessary):** The sum temporal execution of the Rollback matrix must satisfy $t_{total} \le 5\text{s}$. Failure to satisfy this inequality violates Axiom 1.
+1. **Snapshot**: Before touching anything, the agent caches the current, known-good network state into memory.
+2. **Apply**: The agent injects the new fallback routing profile.
+3. **Validate (Netcheck)**: The agent immediately runs a validation check (e.g., an HTTP GET to `1.1.1.1`).
+4. **Commit or Rollback**:
+   - If the request succeeds within 3 seconds, the new profile is **Committed**.
+   - If the request times out or fails, the transaction is aborted, and the snapshot is **Rolled Back**.
+
+This entire sequence is bounded to a maximum of 5 seconds, ensuring the network is never left in a broken state.

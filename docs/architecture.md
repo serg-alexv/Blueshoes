@@ -1,42 +1,22 @@
-# State Machine Architecture
+# System Architecture
 
-**Definition:** The system architecture is a bifurcated set $\{A, C\}$ where $A$ is the deterministic execution path and $C$ is the non-deterministic analytic path.
+The Blueshoes architecture is bifurcated into two distinct environments to protect the router's stability while allowing for advanced analysis.
 
-## Set A: Runtime ($E$)
-**Condition (Necessary):** $E$ must compile natively for the router target ($MT7981B$).
-**Condition (Sufficient):** $E$ is written in Rust, statically compiled with `opt-level=z`, achieving binary size $S_b < 3\text{MB}$.
+## The Edge Runtime (`bs-edge-agent`)
+This is the core daemon running directly on the OpenWrt router.
+- **Role**: It monitors connection health, switches routing profiles, and enforces atomic rollbacks.
+- **Constraints**: It must be extremely lightweight. We prefer memory-safe languages (Rust or Go), pending final compilation footprint tests.
+- **Determinism**: The agent only executes pre-defined, static profiles. It does not guess or generate rules dynamically.
 
-**Sub-components of $E$:**
-- $E_{check}$: Executes continuous Boolean validation $V(path) \in \{\text{true}, \text{false}\}$.
-- $E_{obs}$: Maps negative validation events to a local finite state vector (SQLite).
-- $E_{prof}$: Injects static routing rules to state table.
-- $E_{roll}$: Deterministic function enforcing Axiom 1 ($S_{n+1} \to S_n$).
+## The Analytics Workbench (`bs-workbench`)
+This is an external environment (e.g., a local VM or a developer laptop) used for heavy lifting.
+- **Role**: It processes telemetry databases and raw packet captures exported from the router.
+- **LLM Integration**: It hosts the LLM logic that analyzes network pathologies to suggest new routing strategies.
+- **Isolation**: Because it lives off-router, it cannot crash the network stack if it runs out of memory or hallucinates.
 
-## Set C: Analytics ($W$)
-**Condition (Necessary):** $W$ operates strictly external to the router bounds.
-**Condition (Sufficient):** $W$ executes on a Debian/RHEL Virtual Machine.
-
-**Sub-components of $W$:**
-- $W_{pcap}$: Parses raw packet streams transferred from $E_{obs}$.
-- $W_{LLM}$: Non-deterministic function $L(telemetry) \to P_{index}$, where $P_{index}$ is a recommendation vector for $E_{prof}$.
-
-## Mutation Transaction Diagram
-```mermaid
-stateDiagram-v2
-    [*] --> S_0: Baseline State
-    S_0 --> E_obs: Continuous Observation
-    E_obs --> Pathology: Condition Detected
-    Pathology --> S_n_Snapshot: Trigger Transaction
-    
-    state Transaction {
-        [*] --> S_n_Snapshot: Cache Routing State
-        S_n_Snapshot --> Apply_P_x: Inject Profile
-        Apply_P_x --> Validate_V: Emit Canary
-        Validate_V --> S_success: V = true
-        Validate_V --> S_fail: V = false (t > 3s)
-        S_fail --> Revert_S_n: Atomic Rollback
-    }
-    
-    S_success --> S_1: Commit State
-    Revert_S_n --> S_0: Log Rollback
-```
+## State Mutation Flow
+1. The Edge Agent detects a connection failure (e.g., TCP Resets).
+2. The Agent snapshots the current working routing table.
+3. The Agent applies a new fallback profile (e.g., DNS-over-HTTPS).
+4. The Agent tests connectivity (Validation).
+5. If the test fails, the Agent immediately reverts to the Snapshot.

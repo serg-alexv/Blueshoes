@@ -1,14 +1,14 @@
-# Workbench External Execution Space
+# The Workbench VM
 
-**Definition:** Space $W$ (`bs-workbench`) is the non-deterministic computational environment partitioned entirely from the deterministic execution node $E$.
+Because the `bs-edge-agent` must remain extremely small to fit on the router, all heavy analytical lifting is offloaded to the `bs-workbench`.
 
-## Functional Requirements
-**Condition (Necessary):** $W$ provides computational resources $R_{cpu}$ and $R_{ram}$ exceeding the strict bounds of $H_{target}$ (MT7981B).
+## What is it?
+The Workbench is an external environment (e.g., a Debian Virtual Machine, a Raspberry Pi, or a developer's laptop) running alongside the router on the LAN.
 
-## Mathematical Mapping of $W$
-1. **Telemetry Analysis:** $W$ executes function $f(D_{SQLite}) \to \text{Insight Vector}$.
-2. **PCAP Analysis:** $W$ executes function $g(P_{raw}) \to \text{DPI Pathology Signature}$.
-3. **LLM Inference:** $W$ evaluates non-deterministic algorithm $L(x) \to P_{suggest}$ while satisfying $L \notin E$.
-4. **Toolchain Execution:** $W$ hosts set $W_{remote} = \{\text{nmap}, \text{Wireshark}, \text{iperf3}\}$.
+## Responsibilities
+1. **Telemetry Analysis**: It pulls the SQLite logs from the router to search for network pathology patterns.
+2. **PCAP Analysis**: It hosts heavy tools like `Wireshark` to analyze raw packet captures.
+3. **LLM Inference**: It runs the AI diagnostics that suggest new routing profiles based on the telemetry.
+4. **Heavy Tooling**: It hosts active scanning tools (like `nmap` or `iperf3`) that are too large to fit in the router's 5MB flash budget.
 
-The mapping $W \to E$ requires human validation string input $H_{approve} = \text{true}$. $W$ lacks autonomous mutation authority over $E$.
+The Workbench cannot change the router's configuration autonomously; human approval is currently required to apply its suggestions.

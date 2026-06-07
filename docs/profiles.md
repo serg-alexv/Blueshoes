@@ -1,9 +1,10 @@
-# Static Bounded Profile Sets
+# Static Bounded Profiles
 
-**Definition:** Let $P$ be the set of permissible routing states. $E_{prof} \in P$ guarantees deterministic behavior. The generation of unbounded dynamic routing strings evaluates to $\text{false}$.
+To maintain determinism and stability, the `bs-edge-agent` does not write firewall rules dynamically on the fly. Instead, it selects from a set of pre-compiled, statically defined profiles based on observed network failures.
 
-## The Profile Matrix $P$
-1. **$P_{DIRECT}$:** The baseline operational state. Obfuscation vector $= \emptyset$.
-2. **$P_{DOH}$:** Evaluates routing of port 53 to an encrypted proxy. Necessary condition: Validation function $V(\text{DNS Poisoning}) = \text{true}$.
-3. **$P_{ECH}$:** Drops standard SNI TLS connections, satisfying condition $C_{end\_supports\_ECH} = \text{true}$.
-4. **$P_{OBF}$:** Maps affected packet streams through an AmneziaWG tunnel. Necessary condition: Validation function $V(\text{TCP RST DPI}) = \text{true}$.
+## Initial Profile Set
+
+1. **DIRECT**: The baseline state. Standard OpenWrt routing with no obfuscation.
+2. **DOH_ONLY**: Routes port 53 traffic through an encrypted proxy to bypass simple DNS poisoning.
+3. **ECH_STRICT**: Preserves and prioritizes connections supporting Encrypted Client Hello, dropping standard SNI leakage if necessary.
+4. **OBF_TUNNEL**: Routes traffic encountering severe DPI (e.g., TCP Resets) through an obfuscated tunnel like AmneziaWG.

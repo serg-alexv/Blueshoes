@@ -34,11 +34,15 @@ impl Executor for OpenWrtExecutor {
                         .args(["route", "add", target, "via", via])
                         .status()?;
                 }
-                PlanStep::AddNftRule { table, chain, rule } => {
-                    let mut args = vec!["add", "rule", table, chain];
-                    args.extend(rule.split_whitespace());
+                PlanStep::AddNftRule { table, chain, protocol, dport, rule_action } => {
+                    use crate::journal::planner::NftAction;
+                    let action_str = match rule_action {
+                        NftAction::Accept => "accept",
+                        NftAction::Drop => "drop",
+                        NftAction::Reject => "reject",
+                    };
                     let _ = Command::new("nft")
-                        .args(&args)
+                        .args(["add", "rule", table, chain, protocol, "dport", &dport.to_string(), action_str])
                         .status()?;
                 }
                 PlanStep::SetMtu { interface, mtu } => {

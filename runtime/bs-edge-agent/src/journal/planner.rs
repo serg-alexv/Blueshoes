@@ -3,11 +3,24 @@ use serde::{Serialize, Deserialize};
 use std::net::IpAddr;
 
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
+pub enum NftAction {
+    Accept,
+    Drop,
+    Reject,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 #[serde(tag = "action")]
 pub enum PlanStep {
     AddRoute { target: String, via: String },
     FlushRouteCache,
-    AddNftRule { table: String, chain: String, rule: String },
+    AddNftRule { 
+        table: String, 
+        chain: String, 
+        protocol: String, 
+        dport: u16, 
+        rule_action: NftAction 
+    },
     SetMtu { interface: String, mtu: u32 },
 }
 
@@ -34,7 +47,9 @@ impl Planner {
                     steps.push(PlanStep::AddNftRule { 
                         table: "inet".to_string(), 
                         chain: "forward".to_string(), 
-                        rule: "tcp dport 853 accept".to_string() 
+                        protocol: "tcp".to_string(),
+                        dport: 853,
+                        rule_action: NftAction::Accept,
                     });
                 } else {
                     return Err("DnsPrivacy intent requires 'dns' configuration".to_string());
@@ -44,7 +59,9 @@ impl Planner {
                 steps.push(PlanStep::AddNftRule { 
                     table: "inet".to_string(), 
                     chain: "forward".to_string(), 
-                    rule: "tcp dport 443 accept".to_string() 
+                    protocol: "tcp".to_string(),
+                        dport: 443,
+                        rule_action: NftAction::Accept,
                 });
             }
             ProfileIntent::UserTunnel => {

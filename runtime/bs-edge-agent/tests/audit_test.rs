@@ -52,3 +52,25 @@ fn test_no_mutating_commands_in_source() {
         );
     }
 }
+
+#[test]
+fn test_cli_default_safety() {
+    use clap::Parser;
+    // We must ensure that by default, without `--unsafe-execute`, the agent remains safe.
+    // Let's parse a dummy command line
+    let args = vec!["bs-edge-agent", "canary"];
+    
+    // We have to include the CLI definition here or use the crate's
+    // But since this is an integration test, we might not have direct access to `cli::Cli` 
+    // unless we expose it or test it from `src/cli.rs`.
+    // Wait, since `cli.rs` is part of the binary, integration tests don't see it unless we expose it in `lib.rs`.
+    // Let's test it by invoking the binary and checking the output.
+    
+    let output = std::process::Command::new(env!("CARGO_BIN_EXE_bs-edge-agent"))
+        .arg("canary")
+        .output()
+        .expect("Failed to execute bs-edge-agent");
+        
+    let stdout = String::from_utf8_lossy(&output.stdout);
+    assert!(stdout.contains("DRY RUN MODE. To execute, pass the global --unsafe-execute flag."));
+}

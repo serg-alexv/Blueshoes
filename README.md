@@ -4,6 +4,24 @@ Blueshoes is a rollback-safe adaptive networking runtime doctrine and reference 
 
 It operates primarily on OpenWrt-based routers to provide resilient routing, bounded recovery, and deterministic rollback without risking total loss of internet connectivity.
 
+## Active Milestone: M4.1 Safety Containment
+
+The B0 architecture is governed by strict deterministic planning. **The M4.1 Planner is strictly a planning engine. It does NOT mutate state by default.** 
+
+All `bs-edge-agent` execution capabilities are locked behind an explicit `--unsafe-execute` CLI flag and isolated by a `dangerous_execution` compile-time feature. 
+
+**Default Behavior**:
+```bash
+bs-edge-agent canary
+```
+*Outputs a dry-run log of JSON commands. Execution is aborted safely.*
+
+**Execution Override**:
+```bash
+bs-edge-agent --unsafe-execute canary
+```
+*Triggers the actual physical execution of the planned mutation (Only allowed if compiled with `--features dangerous_execution`).*
+
 ## Suggested GitHub “About” (Copy/Paste)
 
 - **Description**: Transactional networking runtime for OpenWrt routers: observe failures, apply bounded profiles, validate fast, and roll back safely (“Rollback is Sacred”). No MITM. No opaque automation. No bundled paid VPN defaults.

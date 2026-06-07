@@ -118,6 +118,11 @@ fn main() {
                 .spawn()
                 .expect("Failed to spawn bs-watchdog");
 
+            if !cli.unsafe_execute {
+                println!("DRY RUN MODE. To execute, pass the global --unsafe-execute flag.");
+                return;
+            }
+
             println!("Applying plan...");
             if let Err(e) = exec.apply(&plan) {
                 eprintln!("Failed to apply plan: {}", e);

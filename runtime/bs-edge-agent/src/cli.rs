@@ -3,6 +3,9 @@ use clap::{Parser, Subcommand};
 #[derive(Parser)]
 #[command(author, version, about, long_about = None)]
 pub struct Cli {
+    #[arg(long, global = true, default_value_t = false)]
+    pub unsafe_execute: bool,
+
     #[command(subcommand)]
     pub command: Commands,
 }

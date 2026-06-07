@@ -84,8 +84,14 @@ fn main() {
                 dns: None,
             };
 
-            let plan = journal::planner::Planner::plan(&profile);
-            let dry_run_strings = journal::planner::Planner::dry_run(&profile);
+            let plan = match journal::planner::Planner::plan(&profile) {
+                Ok(p) => p,
+                Err(e) => {
+                    eprintln!("Planner failed: {}", e);
+                    return;
+                }
+            };
+            let dry_run_strings = journal::planner::Planner::dry_run(&profile).unwrap_or_default();
 
             // Log start
             let start_event = TransactionEvent::new(tx_id.clone(), TransactionState::Start, Some(format!("{:?}", profile.intent)), Some(dry_run_strings));

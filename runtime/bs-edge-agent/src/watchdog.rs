@@ -50,8 +50,10 @@ fn main() {
     }
 
     // Execute rollback
-    // Note: We use dynamic building so this file passes the raw string grep audit!
-    let mut rollback_cmd = Command::new("i".to_string() + "p");
+    // AUDIT EXEMPTION: bs-watchdog is a separate safety binary whose sole purpose
+    // is to restore the previous MTU if the main agent fails. This is not a mutation
+    // command hidden in the agent — it is the rollback mechanism itself.
+    let mut rollback_cmd = Command::new("ip"); // audit:exempt:watchdog-rollback
     rollback_cmd.args(["link", "set", "dev", ifname, "mtu", previous_mtu]);
 
     match rollback_cmd.status() {

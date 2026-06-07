@@ -1,4 +1,3 @@
-use crate::probes::TelemetryEvent;
 use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Clone, Serialize, Deserialize)]

@@ -1,5 +1,5 @@
 use serde::{Serialize, Deserialize};
-use std::process::Command;
+use std::fs;
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct InterfaceStatus {
@@ -19,16 +19,10 @@ pub fn run(interfaces: &[&str]) -> InterfaceTelemetry {
     let mut results = Vec::new();
 
     for &iface in interfaces {
-        let output = Command::new("cat")
-            .arg(format!("/sys/class/net/{}/operstate", iface))
-            .output();
-
-        let (exists, state) = match output {
-            Ok(out) if out.status.success() => {
-                let s = String::from_utf8_lossy(&out.stdout).trim().to_string();
-                (true, s)
-            }
-            _ => (false, "unknown".to_string()),
+        let path = format!("/sys/class/net/{}/operstate", iface);
+        let (exists, state) = match fs::read_to_string(&path) {
+            Ok(content) => (true, content.trim().to_string()),
+            Err(_) => (false, "unknown".to_string()),
         };
 
         results.push(InterfaceStatus {

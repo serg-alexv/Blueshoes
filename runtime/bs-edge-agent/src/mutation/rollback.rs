@@ -40,15 +40,7 @@ pub fn restore_snapshot(backup_path: &str) -> Result<(), RollbackError> {
         return Err(RollbackError::RestoreFailed(format!("Backup path {} does not exist", backup_path)));
     }
 
-    // Safely copy back
-    let output = Command::new("cp")
-        .arg("-r")
-        .arg(format!("{}/*", backup_path)) // Requires shell expansion, better to use sh -c or walkdir
-        .arg("/etc/config/")
-        .output(); // Wait, `cp -r /tmp/backup/* /etc/config/` requires shell.
-        
-    // Let's avoid shell interpolation. We can just use standard library `fs::copy` or a clean cp command.
-    // Actually, `cp -a /tmp/bs_config_backup_123/. /etc/config/` works natively without shell globbing.
+    // Safely copy back using `-a` with `/. ` suffix to avoid shell glob expansion
     let output = Command::new("cp")
         .arg("-a")
         .arg(format!("{}/.", backup_path))

@@ -1,7 +1,8 @@
+
 use crate::probes::TelemetryEvent;
-use std::fs::{self, File, OpenOptions};
+use std::fs::{File, OpenOptions};
 use std::io::{self, BufRead, BufReader, Write};
-use std::path::{Path, PathBuf};
+use std::path::PathBuf;
 
 fn get_journal_path() -> PathBuf {
     if cfg!(target_arch = "aarch64") && cfg!(target_env = "musl") {

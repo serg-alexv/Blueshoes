@@ -1,3 +1,7 @@
+/// DEPRECATED: This executor predates the B0 `mutation/uci.rs` batch engine.
+/// It executes raw `ip`/`nft` commands directly and only supports MTU rollback.
+/// For B0+ mutations, use `mutation::uci::apply_uci_batch` with `mutation::rollback`.
+/// This module is retained only for the legacy M7 Canary MTU test path.
 use crate::executor::{Executor, Snapshot};
 use crate::journal::planner::PlanStep;
 use std::process::Command;
@@ -28,11 +32,11 @@ impl Executor for OpenWrtExecutor {
 
     fn apply(&self, plan: &[PlanStep]) -> std::io::Result<()> {
         for step in plan {
-            match step {
+            let status = match step {
                 PlanStep::AddRoute { target, via } => {
-                    let _ = Command::new("ip")
+                    Command::new("ip")
                         .args(["route", "add", target, "via", via])
-                        .status()?;
+                        .status()?
                 }
                 PlanStep::AddNftRule {
                     family,
@@ -64,7 +68,7 @@ impl Executor for OpenWrtExecutor {
                         NftAction::Drop => "drop",
                         NftAction::Reject => "reject",
                     };
-                    let _ = Command::new("nft")
+                    Command::new("nft")
                         .args([
                             "add",
                             "rule",
@@ -76,18 +80,25 @@ impl Executor for OpenWrtExecutor {
                             &dport.to_string(),
                             action_str,
                         ])
-                        .status()?;
+                        .status()?
                 }
                 PlanStep::SetMtu { interface, mtu } => {
-                    let _ = Command::new("ip")
+                    Command::new("ip")
                         .args(["link", "set", "dev", interface, "mtu", &mtu.to_string()])
-                        .status()?;
+                        .status()?
                 }
                 PlanStep::FlushRouteCache => {
-                    let _ = Command::new("ip")
+                    Command::new("ip")
                         .args(["route", "flush", "cache"])
-                        .status()?;
+                        .status()?
                 }
+            };
+
+            if !status.success() {
+                return Err(std::io::Error::new(
+                    std::io::ErrorKind::Other,
+                    format!("Command for step {:?} failed with exit code: {}", step, status),
+                ));
             }
         }
         Ok(())

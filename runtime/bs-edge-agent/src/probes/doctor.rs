@@ -18,8 +18,16 @@ pub fn run() -> TelemetryEvent {
         dev_urandom_readable = true;
     }
 
-    if fs::metadata("/root").is_ok() {
-        is_root = true;
+    // Check if running as root by examining /proc/self/status for Uid line
+    if let Ok(status) = fs::read_to_string("/proc/self/status") {
+        for line in status.lines() {
+            if line.starts_with("Uid:") {
+                if let Some(uid_str) = line.split_whitespace().nth(1) {
+                    is_root = uid_str == "0";
+                }
+                break;
+            }
+        }
     }
 
     if !openwrt_readable {

@@ -1,5 +1,5 @@
 use serde::{Serialize, Deserialize};
-use std::process::Command;
+use std::fs;
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct MtuStatus {
@@ -18,16 +18,10 @@ pub fn run(interfaces: &[&str]) -> MtuTelemetry {
     let mut results = Vec::new();
 
     for &iface in interfaces {
-        let output = Command::new("cat")
-            .arg(format!("/sys/class/net/{}/mtu", iface))
-            .output();
-
-        let mtu = match output {
-            Ok(out) if out.status.success() => {
-                let s = String::from_utf8_lossy(&out.stdout).trim().to_string();
-                s.parse::<u32>().ok()
-            }
-            _ => None,
+        let path = format!("/sys/class/net/{}/mtu", iface);
+        let mtu = match fs::read_to_string(&path) {
+            Ok(content) => content.trim().parse::<u32>().ok(),
+            Err(_) => None,
         };
 
         results.push(MtuStatus {

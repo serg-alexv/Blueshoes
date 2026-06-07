@@ -1,12 +1,12 @@
 #!/usr/bin/env python3
-import sys
-import json
+import argparse
 import datetime
+import json
+import os
 import subprocess
+import sys
 
 SSH_OPTS = ["-o", "BatchMode=yes", "-o", "ConnectTimeout=5", "-o", "StrictHostKeyChecking=accept-new"]
-import argparse
-import os
 
 def check_expiration(grant):
     expires_str = grant.get("expires_at_utc", "1970-01-01T00:00:00Z")

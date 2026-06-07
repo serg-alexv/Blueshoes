@@ -4,8 +4,8 @@
 - **[DONE] M1: Read-only Telemetry Probes**. `bs-edge-agent` safely reads Linux state and network endpoints.
 - **[DONE] M1.5: Cross-Compilation Scaffold**. Established the `aarch64-unknown-linux-musl` target.
 > [!IMPORTANT]  
-> **M1.6: Router Smoke Test** (CURRENT BLOCKER)
-> *Task:* `scp` the binary to the MT-3000, run `netcheck`, confirm no mutations, and capture the output. M2 cannot begin until verified.
+> **M1.6: AGY-supervised Router Smoke Test** (CURRENT BLOCKER)
+> *Task:* Antigravity may execute the smoke-test commands, but only from an approved task envelope, only against the explicitly configured router IP, and only with read-only runtime commands after copying the binary to `/tmp`. M2 cannot begin until verified.
 
 ## Phase 2: Transaction Engine & Edge Intelligence
 - **M2: Local Dummy Journal**.

@@ -10,9 +10,12 @@ Blueshoes takes network integrity and operational safety extremely seriously. Be
 5. **No Covert Monetization**: The project must not include hidden “VPN upsell” logic, bundled paid endpoints, affiliate defaults, or any mechanism that silently routes users through third-party commercial tunnels.
 
 ## Vulnerability Reporting
-Please DO NOT report security vulnerabilities through public GitHub issues.
-3. **Data Privacy**: Telemetry exported for diagnostic routing analysis must be strictly metadata (SNI, IP, ports, connection status) and fully anonymized. Raw payloads are never exported.
+Please **DO NOT** report security vulnerabilities through public GitHub issues.
+
+Instead, please use [GitHub Private Vulnerability Reporting](https://github.com/timelabs-npo/Blueshoes/security/advisories/new) to disclose issues confidentially.
+
+Alternatively, Blueshoes is registered on [Huntr](https://huntr.com/). Security researchers are encouraged to submit exploitable vulnerabilities through the Huntr platform to be eligible for bug bounties.
 
 ## Scope of Disclosures
 We are currently in a highly experimental Phase 1. 
-However, if you identify a flaw that violates our **Core Security Commitments** (e.g., an architectural design that accidentally permits TLS interception), we consider that a critical vulnerability.
+However, if you identify a flaw that violates our **Core Security Commitments** (e.g., an architectural design that accidentally permits TLS interception, or an execution path that permits arbitrary shell mutation), we consider that a critical vulnerability.

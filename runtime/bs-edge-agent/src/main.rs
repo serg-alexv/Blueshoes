@@ -1,6 +1,7 @@
 mod cli;
 mod journal;
 mod probes;
+mod profiles;
 
 use clap::Parser;
 use cli::{Cli, Commands};
@@ -73,6 +74,27 @@ fn main() {
         Commands::Trace { target, json: _json_flag } => {
             let event = probes::trace::run(target);
             println!("{}", serde_json::to_string_pretty(&event).unwrap());
+        }
+        Commands::Simulate { json: _json_flag } => {
+            use journal::transaction::{TransactionEvent, TransactionState};
+            let tx_id = format!("tx_{}", std::time::SystemTime::now().duration_since(std::time::UNIX_EPOCH).unwrap().as_secs());
+            
+            // Log intent
+            let start_event = TransactionEvent::new(tx_id.clone(), TransactionState::Start, Some("DNS_PRIVACY".to_string()));
+            if let Err(e) = journal::jsonl::append_transaction(&start_event) {
+                eprintln!("Failed to write start to journal: {}", e);
+            }
+            println!("{}", serde_json::to_string_pretty(&start_event).unwrap());
+
+            // Simulate mutation and success
+            std::thread::sleep(std::time::Duration::from_millis(50));
+            
+            // Log commit
+            let commit_event = TransactionEvent::new(tx_id, TransactionState::Commit, None);
+            if let Err(e) = journal::jsonl::append_transaction(&commit_event) {
+                eprintln!("Failed to write commit to journal: {}", e);
+            }
+            println!("{}", serde_json::to_string_pretty(&commit_event).unwrap());
         }
     }
 }

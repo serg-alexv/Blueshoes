@@ -4,28 +4,31 @@ use std::io::{self, BufRead, BufReader, Write};
 use std::path::{Path, PathBuf};
 
 fn get_journal_path() -> PathBuf {
-    let primary = Path::new("/var/lib/blueshoes");
-
-    // Attempt to use primary path if we can create/access it
-    if fs::create_dir_all(primary).is_ok() {
-        // Double check if we can actually write a test file or just assume we can
-        // If we have write permissions to the dir, we use it
-        let test_file = primary.join(".write_test");
-        if File::create(&test_file).is_ok() {
-            let _ = fs::remove_file(test_file);
-            return primary.join("events.jsonl");
+    if cfg!(target_arch = "aarch64") && cfg!(target_env = "musl") {
+        PathBuf::from("/tmp/bs-edge-journal.jsonl")
+    } else {
+        let dir = PathBuf::from("./target/blueshoes-dev");
+        if !dir.exists() {
+            std::fs::create_dir_all(&dir).unwrap_or_default();
         }
+        dir.join("events.jsonl")
     }
-
-    // Fallback path
-    let fallback = Path::new("./target/blueshoes-dev");
-    let _ = fs::create_dir_all(fallback);
-    fallback.join("events.jsonl")
 }
 
 pub fn append_event(event: &TelemetryEvent) -> io::Result<()> {
+    append_serializable(event)
+}
+
+pub fn append_transaction(event: &crate::journal::transaction::TransactionEvent) -> io::Result<()> {
+    append_serializable(event)
+}
+
+fn append_serializable<T: serde::Serialize>(event: &T) -> io::Result<()> {
     let path = get_journal_path();
-    let mut file = OpenOptions::new().create(true).append(true).open(path)?;
+    let mut file = OpenOptions::new()
+        .create(true)
+        .append(true)
+        .open(path)?;
 
     let json = serde_json::to_string(event)?;
     writeln!(file, "{}", json)

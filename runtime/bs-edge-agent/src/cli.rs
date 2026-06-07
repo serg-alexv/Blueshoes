@@ -47,14 +47,23 @@ pub enum Commands {
     },
     /// Perform an explicit ICMP ping (latency)
     Latency {
+        #[arg(required = true)]
         target: String,
-        #[arg(long, default_value_t = true)]
+
+        #[arg(long, default_value_t = false)]
         json: bool,
     },
     /// Perform a trace to a target
     Trace {
+        #[arg(required = true)]
         target: String,
-        #[arg(long, default_value_t = true)]
+
+        #[arg(long, default_value_t = false)]
+        json: bool,
+    },
+    /// Simulate a dummy transaction rollback
+    Simulate {
+        #[arg(long, default_value_t = false)]
         json: bool,
     },
 }

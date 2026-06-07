@@ -1,0 +1,416 @@
+{
+  "author": "trae-gpt-5.2 (automated security review)",
+  "cross_validation": {
+    "modified_file_count_expected": 12,
+    "notes": "This bundle enumerates 12 file edits and includes a before/after snippet for each modified hunk visible in the repository diff."
+  },
+  "document_size_bytes": 39682,
+  "encoding": "utf-8",
+  "integrity": {
+    "canonicalization": "json.dumps(document_without_integrity_and_size, sort_keys=True, separators=(\",\",\":\"), ensure_ascii=False)",
+    "document_hash": "28110575eb73d5db9c247f408448e76ee0606554a2a6324591962e08a281a272",
+    "hash_algorithm": "sha256",
+    "hash_representation": "hex",
+    "hash_scope": "sha256 over canonical JSON of this document with integrity and document_size_bytes removed"
+  },
+  "modification_timestamp_utc": "2026-06-07T01:22:39+00:00",
+  "project_identifier": "timelabs-npo/Blueshoes",
+  "record_count": 12,
+  "records": [
+    {
+      "change_id": "CHG-0001",
+      "file": {
+        "absolute_path": "/Users/sa/bs/.github/workflows/code-coverage.yml",
+        "filename": "code-coverage.yml",
+        "repo_relative_path": ".github/workflows/code-coverage.yml"
+      },
+      "modified_blocks": [
+        {
+          "after_snippet": "name: code-coverage\n\non:\n  push:\n  pull_request:\n\npermissions: {}\n\njobs:\n  noop:\n    runs-on: ubuntu-latest\n    steps:\n      - name: No-op (docs-only)\n        run: echo \"Docs-only repository: no code coverage job configured.\"",
+          "before_snippet": "            - name: Authenticate to Google Cloud\n  # You may pin to the exact commit or the version.\n  # uses: google-github-actions/auth@7c6bc770dae815cd3e89ee6cdf493a5fab2cc093\n  uses: google-github-actions/auth@v3\n  with:\n    # ID of the default project to use for future API calls and invocations. If\nunspecified, this action will attempt to extract the value from other\ninputs such as \"service_account\" or \"credentials_json\".\n    project_id: # optional\n    # The full identifier of the Workload Identity Provider, including the\nproject number, pool name, and provider name. If provided, this must be\nthe full identifier which includes all parts, for example:\n\"projects/123456789/locations/global/workloadIdentityPools/my-pool/providers/my-provider\".\nThis is mutually exclusive with \"credentials_json\".\n    workload_identity_provider: # optional\n    # Email address or unique identifier of the Google Cloud service account for\nwhich to generate credentials. This is required if\n\"workload_identity_provider\" is specified.\n    service_account: # optional\n    # The value for the audience (aud) parameter in GitHub's generated OIDC\ntoken. This value defaults to the value of \"workload_identity_provider\",\nwhich is also the default value Google Cloud expects for the audience\nparameter on the token.\n    audience: # optional, default is \n    # The Google Cloud JSON service account key to use for authentication. This\nis mutually exclusive with \"workload_identity_provider\".\n    credentials_json: # optional\n    # If true, the action will securely generate a credentials file which can be\nused for authentication via gcloud and Google Cloud SDKs.\n    create_credentials_file: # optional, default is true\n    # If true, the action will export common environment variables which are\nknown to be consumed by popular downstream libraries and tools, including:\n\n- CLOUDSDK_PROJECT\n- CLOUDSDK_CORE_PROJECT\n- GCP_PROJECT\n- GCLOUD_PROJECT\n- GOOGLE_CLOUD_PROJECT\n\nIf \"create_credentials_file\" is true, additional environment variables are\nexported:\n\n- CLOUDSDK_AUTH_CREDENTIAL_FILE_OVERRIDE\n- GOOGLE_APPLICATION_CREDENTIALS\n- GOOGLE_GHA_CREDS_PATH\n\nIf false, the action will not export any environment variables, meaning\nfuture steps are unlikely to be automatically authenticated to Google\nCloud.\n    export_environment_variables: # optional, default is true\n    # Output format for the generated authentication token. For OAuth 2.0 access\ntokens, specify \"access_token\". For OIDC tokens, specify \"id_token\". To\nskip token generation, leave this value empty.\n    token_format: # optional, default is \n    # List of additional service account emails or unique identities to use for\nimpersonation in the chain.\n    delegates: # optional, default is \n    # The Google Cloud universe to use for constructing API endpoints. The\ndefault universe is \"googleapis.com\", which corresponds to\nhttps://cloud.google.com. Trusted Partner Cloud and Google Distributed\nHosted Cloud should set this to their universe address.\n    universe: # optional, default is googleapis.com\n    # An optional Reason Request System Parameter for each API call made by the\nGitHub Action. This will inject the \"X-Goog-Request-Reason\" HTTP header,\nwhich will provide user-supplied information in Google Cloud audit logs.\n    request_reason: # optional\n    # If true, the action will remove any created credentials from the\nfilesystem upon completion. This only applies if \"create_credentials_file\"\nis true.\n    cleanup_credentials: # optional, default is true\n    # Desired lifetime duration of the access token, in seconds. This must be\nspecified as the number of seconds with a trailing \"s\" (e.g. 30s). This is\nonly valid when \"token_format\" is \"access_token\".\n    access_token_lifetime: # optional, default is 3600s\n    # List of OAuth 2.0 access scopes to be included in the generated token.\nThis is only valid when \"token_format\" is \"access_token\".\n    access_token_scopes: # optional, default is https://www.googleapis.com/auth/cloud-platform\n    # Email address of a user to impersonate for Domain-Wide Delegation Access\ntokens created for Domain-Wide Delegation cannot have a lifetime beyond 1\nhour. This is only valid when \"token_format\" is \"access_token\".\n    access_token_subject: # optional, default is \n    # The audience (aud) for the generated Google Cloud ID Token. This is only\nvalid when \"token_format\" is \"id_token\".\n    id_token_audience: # optional, default is \n    # Optional parameter of whether to include the service account email in the\ngenerated token. If true, the token will contain \"email\" and\n\"email_verified\" claims. This is only valid when \"token_format\" is\n\"id_token\".\n    id_token_include_email: # optional, default is false",
+          "hunk_header": "@@ -1,90 +1,14 @@"
+        }
+      ],
+      "rationale": {
+        "decision_process": "Replaced the file with a minimal, valid no-op workflow using empty permissions. This neutralizes credential/auth risk while keeping the repository structure intact. Alternative (deleting the workflow file) was avoided because the workflow was explicitly retained and because a no-op provides an explicit, safe default behavior.",
+        "evidence": {
+          "tests_or_errors": "No tests executed (docs-only repository). No diagnostics reported."
+        },
+        "impacts": {
+          "dependencies": "GitHub Actions only.",
+          "functional": "CI now runs a harmless no-op job instead of containing a misleading auth fragment.",
+          "maintainability": "Makes repository intent explicit and prevents future confusion.",
+          "security": "Reduces risk of accidental secret usage and prevents introducing cloud auth steps without review."
+        },
+        "problem_resolved": "The workflow file content was an incomplete third-party cloud authentication snippet and not a coherent GitHub Actions workflow. Leaving it present invites copy/paste credential wiring (secrets/OIDC), increases CI supply-chain risk, and creates maintenance ambiguity."
+      },
+      "severity": "critical"
+    },
+    {
+      "change_id": "CHG-0002",
+      "file": {
+        "absolute_path": "/Users/sa/bs/README.md",
+        "filename": "README.md",
+        "repo_relative_path": "README.md"
+      },
+      "modified_blocks": [
+        {
+          "after_snippet": "## Phase 1 Scope\nPhase 1 targets the **GL.iNet GL-MT3000** (OpenWrt) with a deterministic edge agent (`bs-edge-agent`). \n- LLM diagnostics remain external/read-only on a separate workbench (`bs-workbench`).\n- MITM is strictly forbidden.\n- ECH is observed and preserved, not forced.\n- Blueshoes does not ship with bundled commercial VPN endpoints or “one-click paid tunnel” defaults.\nRead more in [Phase 1 Scope](docs/phase1-scope.md).",
+          "before_snippet": "## Phase 1 Scope\nPhase 1 targets the **GL.iNet GL-MT3000** (OpenWrt) with a deterministic edge agent (`bs-edge-agent`). \n- LLM diagnostics remain external/read-only on a separate workbench (`bs-workbench`).\n- MITM is strictly forbidden.\n- ECH is observed and preserved, not forced.\nRead more in [Phase 1 Scope](docs/phase1-scope.md).",
+          "hunk_header": "@@ -16,10 +16,11 @@"
+        }
+      ],
+      "rationale": {
+        "decision_process": "Added one explicit constraint line in the Phase 1 Scope bullets. This location is intentionally prominent and user-facing. Alternative (only documenting in deeper doctrine/security docs) was rejected because contributors often act on README-level cues.",
+        "evidence": {
+          "tests_or_errors": "No tests executed (docs-only repository). No diagnostics reported."
+        },
+        "impacts": {
+          "functional": "No runtime changes (documentation only).",
+          "maintainability": "Aligns README with doctrine/security constraints to reduce policy drift.",
+          "security": "Reduces risk of future covert tunnel defaults being treated as acceptable.",
+          "user_facing": "Clearer expectations for operators and contributors."
+        },
+        "problem_resolved": "The high-level README messaging did not explicitly prohibit bundling paid VPN endpoints or default upsell behavior. That omission is a governance gap attackers and unethical integrators exploit: ambiguous scope enables covert monetization and traffic rerouting under a “censorship resistance” pretext."
+      },
+      "severity": "minor"
+    },
+    {
+      "change_id": "CHG-0003",
+      "file": {
+        "absolute_path": "/Users/sa/bs/SECURITY.md",
+        "filename": "SECURITY.md",
+        "repo_relative_path": "SECURITY.md"
+      },
+      "modified_blocks": [
+        {
+          "after_snippet": "## Core Security Commitments\n1. **No MITM**: Blueshoes will never install synthetic root certificates or decrypt TLS payloads.\n2. **LLM Isolation**: Diagnostic LLMs are strictly read-only and operate entirely outside the router's execution environment. They cannot issue state-mutating shell commands.\n3. **Data Privacy**: Telemetry exported for diagnostic routing analysis must be strictly minimized metadata (IP/port tuples, coarse timing, failure modes). Avoid collecting SNI/hostnames by default; where collection is unavoidable for debugging, it must be explicit, time-bounded, and redacted or irreversibly transformed before leaving the router.\n4. **PCAP Handling**: Packet captures are high-risk artifacts. If captures are supported, they must be opt-in, time-bounded, encrypted in transit to the Workbench, and stored with short retention and least-privilege access controls.\n5. **No Covert Monetization**: The project must not include hidden “VPN upsell” logic, bundled paid endpoints, affiliate defaults, or any mechanism that silently routes users through third-party commercial tunnels.",
+          "before_snippet": "## Core Security Commitments\n1. **No MITM**: Blueshoes will never install synthetic root certificates or decrypt TLS payloads.\n2. **LLM Isolation**: Diagnostic LLMs are strictly read-only and operate entirely outside the router's execution environment. They cannot issue state-mutating shell commands.\n3. **Data Privacy**: Telemetry exported for diagnostic routing analysis must be strictly metadata (SNI, IP, ports, connection status) and fully anonymized. Raw payloads are never exported.",
+          "hunk_header": "@@ -9,6 +9,8 @@"
+        }
+      ],
+      "rationale": {
+        "decision_process": "Reframed telemetry toward strict minimization and avoidance of hostnames by default, added explicit PCAP controls, and added an explicit ban on covert monetization hooks. The chosen approach is policy-level guardrails that prevent future implementations from drifting into surveillance or upsell behavior. Alternative (leaving telemetry broad and relying on future implementation discipline) was rejected as weak governance.",
+        "evidence": {
+          "tests_or_errors": "No tests executed (docs-only repository). No diagnostics reported."
+        },
+        "impacts": {
+          "compliance": "Stronger privacy posture and clearer retention/handling expectations.",
+          "dependencies": "Future telemetry exporters and PCAP forwarding must respect these commitments.",
+          "security": "Reduces metadata sensitivity and exfiltration blast radius; constrains future logging and capture workflows."
+        },
+        "problem_resolved": "The policy previously normalized collecting SNI/hostnames as routine telemetry. That expands privacy/legal risk, undermines ECH-preservation goals, and increases the damage of any telemetry exfiltration. PCAP handling was also not defined, leaving a high-risk artifact class unmanaged."
+      },
+      "severity": "major"
+    },
+    {
+      "change_id": "CHG-0004",
+      "file": {
+        "absolute_path": "/Users/sa/bs/docs/doctrine.md",
+        "filename": "doctrine.md",
+        "repo_relative_path": "docs/doctrine.md"
+      },
+      "modified_blocks": [
+        {
+          "after_snippet": "## 4. Diagnostic Boundary\nLarge Language Models (LLMs) are used strictly for offline log analysis and profile recommendations. They run on external hardware (the Workbench) and have **zero authority** to issue state-mutating shell commands on the router itself.\n\n## 5. Non-Destructive Removability\nBlueshoes must operate cleanly. Disabling or removing the Blueshoes agent must perfectly restore the vanilla OpenWrt routing configuration without leaving residual broken states behind.\n\n## 6. Abuse Resistance & Compliance\nBlueshoes is built to improve lawful access and availability, not to enable profiteering or covert rerouting.\n\n1. **No Bundled Commercial VPN Defaults**: The project must not ship preconfigured paid VPN endpoints, affiliate defaults, or “one-click” commercial tunnel integrations.\n2. **Explicitness Over Stealth**: Any tunneling, proxying, or traffic forwarding beyond normal routing must be explicit, operator-configured, and reversible. No transparent interception.\n3. **Data Minimization**: Collect the minimum telemetry needed for rollback safety and troubleshooting, and treat diagnostics artifacts (logs, packet captures) as sensitive.\n\n## Audit Trail (Cross-Team Review)\n- 2026-06-07: Tightened ECH language to prevent claims of router-side “ECH enablement” via manipulation; clarified that any tunneling is explicit and operator-configured.\n- 2026-06-07: Reframed profiles to avoid implicit proxy/VPN defaults; removed references that implied bundled obfuscated VPN implementations; added explicit “no commercial VPN defaults” constraint.\n- 2026-06-07: Updated netcheck/transaction model to avoid hard-coded single canary targets to reduce privacy leakage and brittle validation.",
+          "before_snippet": "## 4. Diagnostic Boundary\nLarge Language Models (LLMs) are used strictly for offline log analysis and profile recommendations. They run on external hardware (the Workbench) and have **zero authority** to issue state-mutating shell commands on the router itself.\n\n## 5. Non-Destructive Removability\nBlueshoes must operate cleanly. Disabling or removing the Blueshoes agent must perfectly restore the vanilla OpenWrt routing configuration without leaving residual broken states behind.",
+          "hunk_header": "@@ -14,5 +14,17 @@"
+        }
+      ],
+      "rationale": {
+        "decision_process": "Added an Abuse Resistance & Compliance section to codify non-negotiable constraints (no bundled paid endpoints, explicitness over stealth, data minimization). Added an audit trail with dated entries to support cross-team review and rollback reasoning. Alternative (scattering constraints across multiple docs) was rejected because doctrine is the top-level normative source and should anchor the rules.",
+        "evidence": {
+          "tests_or_errors": "No tests executed (docs-only repository). No diagnostics reported."
+        },
+        "impacts": {
+          "architecture": "Introduces explicit governance constraints that any future edge-agent/workbench code must satisfy.",
+          "compliance": "Improves clarity on lawful/ethical intent and reduces scope ambiguity.",
+          "maintainability": "Audit trail supports reviewers and downstream collaborators."
+        },
+        "problem_resolved": "Core doctrine lacked explicit constraints against bundled commercial tunnel defaults and lacked a consolidated audit trail for cross-team review. Without these, unethical “VPN profiteering” features can be justified as incidental implementation details and slip past reviews."
+      },
+      "severity": "major"
+    },
+    {
+      "change_id": "CHG-0005",
+      "file": {
+        "absolute_path": "/Users/sa/bs/docs/ech-position.md",
+        "filename": "ech-position.md",
+        "repo_relative_path": "docs/ech-position.md"
+      },
+      "modified_blocks": [
+        {
+          "after_snippet": "## Our Position on ECH\n1. **Client Responsibility**: Generating the Encrypted Client Hello (ECH) is the responsibility of the client browser or OS. \n2. **No Injection**: The router agent will not synthetically construct or inject ECH headers into plaintext ClientHello packets on the fly.\n3. **Preservation**: The router will observe and preserve ECH where it naturally occurs. Blueshoes will not claim to “turn on ECH” via traffic manipulation.\n4. **Failure Handling**: If ECH-related handshakes appear to be systematically failing, Blueshoes will prefer non-invasive mitigations (e.g., safer DNS resolution paths that do not strip HTTPS/SVCB records). If tunneling is used at all, it must be an explicit, operator-configured, lawful egress endpoint and never a bundled commercial VPN default.",
+          "before_snippet": "## Our Position on ECH\n1. **Client Responsibility**: Generating the Encrypted Client Hello (ECH) is the responsibility of the client browser or OS. \n2. **No Injection**: The router agent will not synthetically construct or inject ECH headers into plaintext ClientHello packets on the fly.\n3. **Preservation**: The router will observe ECH traffic. If ECH traffic is being systematically dropped by the ISP, Blueshoes will route that traffic through an obfuscated tunnel to ensure the ECH payload reaches its destination intact.",
+          "hunk_header": "@@ -3,6 +3,7 @@"
+        }
+      ],
+      "rationale": {
+        "decision_process": "Clarified that the router cannot “turn on ECH” and should prefer non-invasive mitigations (DNS record preservation, safe resolution paths). Constrained tunneling to explicit operator configuration and lawful endpoints, explicitly banning bundled commercial defaults. Alternative (keeping generalized tunnel language) was rejected because it invites ambiguous implementations.",
+        "evidence": {
+          "tests_or_errors": "No tests executed (docs-only repository). No diagnostics reported."
+        },
+        "impacts": {
+          "cross_doc_consistency": "Aligns with MITM ban and updated profiles.",
+          "security": "Reduces risk of misleading protocol claims and reduces the chance of designing toward MITM.",
+          "user_facing": "Sets correct expectations: ECH is client responsibility; router preserves rather than forces."
+        },
+        "problem_resolved": "The previous text implied the router could respond to ECH failures by routing traffic through an obfuscated tunnel, without clearly stating the non-injectable, end-to-end nature of ECH. This creates a credibility gap and can be weaponized to justify MITM-like behavior or “traffic manipulation” claims."
+      },
+      "severity": "major"
+    },
+    {
+      "change_id": "CHG-0006",
+      "dependency_mapping": {
+        "related_files": [
+          "docs/transaction-model.md"
+        ],
+        "relationship": "Keeps transaction model validation guidance consistent with netcheck canary guidance."
+      },
+      "file": {
+        "absolute_path": "/Users/sa/bs/docs/netcheck.md",
+        "filename": "netcheck.md",
+        "repo_relative_path": "docs/netcheck.md"
+      },
+      "modified_blocks": [
+        {
+          "after_snippet": "## The Validation Loop\nWhen the `bs-edge-agent` switches a routing profile, it must immediately verify that the client has retained internet connectivity.\n\n1. **Canary Targets**: The agent dispatches lightweight HTTP/HTTPS requests to a small set of operator-configured endpoints. Avoid hard-coding single third-party IPs to reduce privacy leakage and false negatives under censorship.\n2. **Temporal Bound**: Each request must return a valid `HTTP 200 OK` within 3 seconds, and the overall validation must remain bounded.\n3. **Failure State**: If all canaries time out, return 5xx, or fail DNS resolution, the validation evaluates as `FALSE`.\n\nIf `FALSE`, the agent triggers the immediate rollback function to restore the previous known-good routing table.",
+          "before_snippet": "## The Validation Loop\nWhen the `bs-edge-agent` switches a routing profile, it must immediately verify that the client has retained internet connectivity.\n\n1. **Canary Target**: The agent dispatches a lightweight HTTP/HTTPS GET request to a known, highly available endpoint (e.g., `1.1.1.1` or a dedicated validation server).\n2. **Temporal Bound**: The response must return a valid `HTTP 200 OK` within 3 seconds.\n3. **Failure State**: If the request times out, returns a 5xx error, or fails DNS resolution, the validation evaluates as `FALSE`.\n\nIf `FALSE`, the agent triggers the immediate rollback function to restore the previous known-good routing table.",
+          "hunk_header": "@@ -3,10 +3,10 @@"
+        }
+      ],
+      "rationale": {
+        "decision_process": "Shifted language to an operator-configured canary set with bounded time. This preserves rollback safety goals while avoiding a centralized dependency. Alternative (naming a vendor endpoint) was rejected due to privacy and resilience concerns.",
+        "evidence": {
+          "tests_or_errors": "No tests executed (docs-only repository). No diagnostics reported."
+        },
+        "impacts": {
+          "functional": "No runtime changes (documentation only).",
+          "maintainability": "Encourages configurable validation behavior in future implementation.",
+          "security": "Reduces implied fingerprinting design and improves censorship resilience."
+        },
+        "problem_resolved": "Hard-coding a single “known endpoint” creates a privacy beacon (centralized fingerprint) and increases false negatives under censorship (a censor can block that endpoint while other connectivity is fine). It also encourages cargo-cult implementation."
+      },
+      "severity": "minor"
+    },
+    {
+      "change_id": "CHG-0007",
+      "dependency_mapping": {
+        "profile_name_mapping": {
+          "DIRECT": "DIRECT",
+          "DOH_ONLY": "DNS_PRIVACY",
+          "ECH_STRICT": "ECH_PRESERVE",
+          "OBF_TUNNEL": "USER_TUNNEL (Optional, Explicit)"
+        },
+        "related_files": [
+          "docs/profiles.md",
+          "docs/roadmap.md"
+        ]
+      },
+      "file": {
+        "absolute_path": "/Users/sa/bs/docs/phase1-scope.md",
+        "filename": "phase1-scope.md",
+        "repo_relative_path": "docs/phase1-scope.md"
+      },
+      "modified_blocks": [
+        {
+          "after_snippet": "## In Scope for Phase 1\n- **Target Hardware**: GL.iNet MT-3000 (MediaTek MT7981B).\n- **Core Engine**: A bare-metal daemon (`bs-edge-agent`) running natively on OpenWrt.\n- **Rollback Safety**: Implementing the Snapshot $\\to$ Apply $\\to$ Validate $\\to$ Rollback loop.\n- **Static Profiles**: Basic fallback profiles (e.g., encrypted DNS upstreams, ECH preservation behaviors, and optionally an explicit operator-configured tunnel profile with no bundled commercial endpoints).\n- **Basic Telemetry**: Logging connection failures (TCP RST, DNS timeouts) to a local SQLite database.",
+          "before_snippet": "## In Scope for Phase 1\n- **Target Hardware**: GL.iNet MT-3000 (MediaTek MT7981B).\n- **Core Engine**: A bare-metal daemon (`bs-edge-agent`) running natively on OpenWrt.\n- **Rollback Safety**: Implementing the Snapshot $\\to$ Apply $\\to$ Validate $\\to$ Rollback loop.\n- **Static Profiles**: Basic fallback profiles (e.g., DNS-over-HTTPS redirection, AmneziaWG obfuscation).\n- **Basic Telemetry**: Logging connection failures (TCP RST, DNS timeouts) to a local SQLite database.",
+          "hunk_header": "@@ -4,11 +4,11 @@"
+        }
+      ],
+      "rationale": {
+        "decision_process": "Replaced the example with generic capabilities aligned to doctrine: encrypted DNS upstreams, ECH preservation, and only an explicit operator-configured tunnel profile (no bundled endpoints). Alternative (removing tunnel mention entirely) was not chosen to keep censorship-resilience goals acknowledged while constraining abuse.",
+        "evidence": {
+          "tests_or_errors": "No tests executed (docs-only repository). No diagnostics reported."
+        },
+        "impacts": {
+          "cross_doc_consistency": "Terminology aligns with updated profiles/roadmap and anti-monetization constraints.",
+          "functional": "No runtime changes (documentation only).",
+          "governance": "Reduces ambiguity for Phase 1 deliverables."
+        },
+        "problem_resolved": "Scope text named specific obfuscation tunnel technology and implied redirection behavior. That reads like an embedded VPN product plan and increases abuse/monetization risk by normalizing a specific “obfuscated VPN” implementation path."
+      },
+      "severity": "minor"
+    },
+    {
+      "change_id": "CHG-0008",
+      "dependency_mapping": {
+        "profile_name_mapping": {
+          "DIRECT": "DIRECT",
+          "DOH_ONLY": "DNS_PRIVACY",
+          "ECH_STRICT": "ECH_PRESERVE",
+          "OBF_TUNNEL": "USER_TUNNEL (Optional, Explicit)"
+        },
+        "related_files": [
+          "docs/phase1-scope.md",
+          "docs/roadmap.md"
+        ]
+      },
+      "file": {
+        "absolute_path": "/Users/sa/bs/docs/profiles.md",
+        "filename": "profiles.md",
+        "repo_relative_path": "docs/profiles.md"
+      },
+      "modified_blocks": [
+        {
+          "after_snippet": "## Initial Profile Set\n\n1. **DIRECT**: The baseline state. Standard OpenWrt routing with no obfuscation.\n2. **DNS_PRIVACY**: Uses encrypted DNS upstreams (DoH/DoT) for router-side resolution to reduce DNS tampering and metadata exposure. It does not silently “proxy” arbitrary user traffic.\n3. **ECH_PRESERVE**: Preserves end-to-end TLS integrity and avoids behaviors that strip or downgrade ECH-related DNS records (HTTPS/SVCB). It does not attempt to inject ECH, and it does not intentionally break non-ECH sites.\n4. **USER_TUNNEL (Optional, Explicit)**: If and only if the operator configures their own lawful egress endpoint, selected traffic may be routed through an explicit tunnel profile to bypass censorship/DPI. Blueshoes must not ship with preconfigured commercial VPN endpoints, affiliate defaults, or “one-click paid tunnel” integrations.",
+          "before_snippet": "## Initial Profile Set\n\n1. **DIRECT**: The baseline state. Standard OpenWrt routing with no obfuscation.\n2. **DOH_ONLY**: Routes port 53 traffic through an encrypted proxy to bypass simple DNS poisoning.\n3. **ECH_STRICT**: Preserves and prioritizes connections supporting Encrypted Client Hello, dropping standard SNI leakage if necessary.\n4. **OBF_TUNNEL**: Routes traffic encountering severe DPI (e.g., TCP Resets) through an obfuscated tunnel like AmneziaWG.",
+          "hunk_header": "@@ -3,8 +3,8 @@"
+        }
+      ],
+      "rationale": {
+        "decision_process": "Reframed profiles to: (1) DNS privacy for router-side resolution (not silent proxying user traffic), (2) ECH preservation without injection or intentional breakage, (3) optional explicit operator-configured tunnel with a hard ban on bundled commercial endpoints. Alternative (keeping names and adding disclaimers) was rejected because names drive implementation decisions and reviews.",
+        "evidence": {
+          "tests_or_errors": "No tests executed (docs-only repository). No diagnostics reported."
+        },
+        "impacts": {
+          "cross_file_dependencies": "Terminology requires consistent references in scope/roadmap and any future implementation code.",
+          "security": "Reduces likelihood of implementing downgrade/MITM-adjacent behaviors.",
+          "user_facing": "Clarifies that privacy improvements are not equivalent to providing a commercial VPN."
+        },
+        "problem_resolved": "Profile names and descriptions implied behavior that can become unethical by default: silent proxying, intentionally breaking non-ECH sites (“drop SNI”), and embedding a specific obfuscated VPN implementation path. This is both a security risk (encourages brittle interception-like designs) and a governance risk (normalizes monetized VPN defaults)."
+      },
+      "severity": "major"
+    },
+    {
+      "change_id": "CHG-0009",
+      "file": {
+        "absolute_path": "/Users/sa/bs/docs/registries.md",
+        "filename": "registries.md",
+        "repo_relative_path": "docs/registries.md"
+      },
+      "modified_blocks": [
+        {
+          "after_snippet": "## 3. Security Limits\n- **No MITM**: Decryption of TLS traffic by the router is forbidden.\n- **No LLM Shell Access**: The LLM cannot write or execute shell commands on the router.\n- **No Bundled Paid Tunnels**: No preconfigured commercial VPN endpoints, affiliate defaults, or covert monetization hooks.",
+          "before_snippet": "## 3. Security Limits\n- **No MITM**: Decryption of TLS traffic by the router is forbidden.\n- **No LLM Shell Access**: The LLM cannot write or execute shell commands on the router.",
+          "hunk_header": "@@ -13,5 +13,6 @@"
+        }
+      ],
+      "rationale": {
+        "decision_process": "Added a single checklist bullet under Security Limits to make the constraint enforceable during PR review. Alternative (relying solely on doctrine) was rejected because registries are used as operational gating criteria.",
+        "evidence": {
+          "tests_or_errors": "No tests executed (docs-only repository). No diagnostics reported."
+        },
+        "impacts": {
+          "functional": "No runtime changes (documentation only).",
+          "maintainability": "Improves review consistency and prevents policy regressions.",
+          "security": "Reduces risk of covert rerouting/upsell logic."
+        },
+        "problem_resolved": "The registries checklist lacked an explicit entry that reviewers can enforce to prevent bundled commercial tunnel defaults or affiliate monetization hooks."
+      },
+      "severity": "patch"
+    },
+    {
+      "change_id": "CHG-0010",
+      "file": {
+        "absolute_path": "/Users/sa/bs/docs/rejected-ideas.md",
+        "filename": "rejected-ideas.md",
+        "repo_relative_path": "docs/rejected-ideas.md"
+      },
+      "modified_blocks": [
+        {
+          "after_snippet": "## 4. Containerized Router Sandbox (LXC/Docker)\n**Rejected**: Base container kernels require too much flash memory (>5MB). It would require an external USB drive, complicating the installation and violating the zero-marginal-cost philosophy.\n\n## 5. Bundled Commercial VPN Defaults\n**Rejected**: Shipping preconfigured paid endpoints, affiliate defaults, or covert monetization hooks creates a supply-chain and abuse risk, collapses user trust, and pushes the project toward surveillance incentives. Any tunneling must be explicitly configured by the operator and remain fully removable.",
+          "before_snippet": "## 4. Containerized Router Sandbox (LXC/Docker)\n**Rejected**: Base container kernels require too much flash memory (>5MB). It would require an external USB drive, complicating the installation and violating the zero-marginal-cost philosophy.",
+          "hunk_header": "@@ -11,5 +11,8 @@"
+        }
+      ],
+      "rationale": {
+        "decision_process": "Added a new rejected-idea entry that documents the rationale and sets a durable precedent. Alternative (leaving it as an unwritten norm) was rejected because it increases re-litigation cost and weakens governance.",
+        "evidence": {
+          "tests_or_errors": "No tests executed (docs-only repository). No diagnostics reported."
+        },
+        "impacts": {
+          "functional": "No runtime changes (documentation only).",
+          "governance": "Raises the bar for any future proposal to ship paid endpoints or affiliate defaults.",
+          "security": "Reduces supply-chain and abuse incentives."
+        },
+        "problem_resolved": "Without explicitly rejecting bundled commercial VPN defaults, the project remains vulnerable to “business logic creep” where monetization hooks are later reframed as minor additions."
+      },
+      "severity": "patch"
+    },
+    {
+      "change_id": "CHG-0011",
+      "dependency_mapping": {
+        "profile_name_mapping": {
+          "DIRECT": "DIRECT",
+          "DOH_ONLY": "DNS_PRIVACY",
+          "ECH_STRICT": "ECH_PRESERVE",
+          "OBF_TUNNEL": "USER_TUNNEL (Optional, Explicit)"
+        },
+        "related_files": [
+          "docs/profiles.md",
+          "docs/phase1-scope.md"
+        ]
+      },
+      "file": {
+        "absolute_path": "/Users/sa/bs/docs/roadmap.md",
+        "filename": "roadmap.md",
+        "repo_relative_path": "docs/roadmap.md"
+      },
+      "modified_blocks": [
+        {
+          "after_snippet": "## Phase 3: Advanced Obfuscation\n- Implement fine-grained DNS-over-HTTPS/DoT fallbacks with strict privacy controls and clear user-visible configuration.\n- Add support for optional, explicitly configured tunnel transports where the operator supplies and controls the egress endpoint. The project must not ship bundled commercial VPN endpoints, paid defaults, or covert monetization hooks.\n\n## Phase 4: Deferred Complexity (The Global Mesh)\n- **Opt-in Telemetry Exchange**: Evaluate peer-to-peer sharing of anonymized capability data between nodes. The goal is to crowdsource routing paths to defeat censorship at scale, structurally disrupting legacy VPN monetization models.\n- **Cooperative SOCKS**: Allow explicit client opt-in proxies for advanced tracing, with strong abuse-resistance and no transparent interception.",
+          "before_snippet": "## Phase 3: Advanced Obfuscation\n- Statically compile AmneziaWG (or similar obfuscation logic) into the router profiles.\n- Implement fine-grained DNS-over-HTTPS fallbacks.\n\n## Phase 4: Deferred Complexity (The Global Mesh)\n- **Opt-in Telemetry Exchange**: Evaluate peer-to-peer sharing of anonymized capability data between nodes. The goal is to crowdsource routing paths to defeat censorship at scale, structurally disrupting legacy VPN monetization models.\n- **Cooperative SOCKS**: Allow explicit client opt-in proxies for advanced tracing.",
+          "hunk_header": "@@ -10,11 +10,11 @@"
+        }
+      ],
+      "rationale": {
+        "decision_process": "Reworded Phase 3 to emphasize encrypted DNS fallbacks with privacy controls and to constrain tunnels to explicit operator-provided endpoints (no bundled paid endpoints). Tightened cooperative proxy language to require abuse resistance and forbid transparent interception. Alternative (removing tunnel/proxy roadmap entirely) was rejected to preserve the censorship-resilience goals while reducing abuse potential.",
+        "evidence": {
+          "tests_or_errors": "No tests executed (docs-only repository). No diagnostics reported."
+        },
+        "impacts": {
+          "compliance": "Improves clarity on explicitness and anti-monetization constraints.",
+          "cross_file_consistency": "Aligns future direction with doctrine/security and the updated profile definitions.",
+          "functional": "No runtime changes (documentation only)."
+        },
+        "problem_resolved": "The roadmap named specific obfuscation/VPN tech and did not sufficiently constrain future tunneling/proxy features, which can be repurposed into a monetized VPN product path."
+      },
+      "severity": "minor"
+    },
+    {
+      "change_id": "CHG-0012",
+      "dependency_mapping": {
+        "related_files": [
+          "docs/netcheck.md"
+        ],
+        "relationship": "Uses the same operator-configured canary target concept described in netcheck."
+      },
+      "file": {
+        "absolute_path": "/Users/sa/bs/docs/transaction-model.md",
+        "filename": "transaction-model.md",
+        "repo_relative_path": "docs/transaction-model.md"
+      },
+      "modified_blocks": [
+        {
+          "after_snippet": "## The Execution Flow\n\n1. **Snapshot**: Before touching anything, the agent caches the current, known-good network state into memory.\n2. **Apply**: The agent injects the new fallback routing profile.\n3. **Validate (Netcheck)**: The agent immediately runs a bounded connectivity check against operator-configured canary targets.\n4. **Commit or Rollback**:\n   - If the request succeeds within 3 seconds, the new profile is **Committed**.\n   - If the request times out or fails, the transaction is aborted, and the snapshot is **Rolled Back**.",
+          "before_snippet": "## The Execution Flow\n\n1. **Snapshot**: Before touching anything, the agent caches the current, known-good network state into memory.\n2. **Apply**: The agent injects the new fallback routing profile.\n3. **Validate (Netcheck)**: The agent immediately runs a validation check (e.g., an HTTP GET to `1.1.1.1`).\n4. **Commit or Rollback**:\n   - If the request succeeds within 3 seconds, the new profile is **Committed**.\n   - If the request times out or fails, the transaction is aborted, and the snapshot is **Rolled Back**.",
+          "hunk_header": "@@ -4,11 +4,11 @@"
+        }
+      ],
+      "rationale": {
+        "decision_process": "Made the validation step consistent with netcheck guidance by requiring operator-configured canary targets. Alternative (keeping a single example) was rejected to avoid cargo-culting and to reduce privacy leakage.",
+        "evidence": {
+          "tests_or_errors": "No tests executed (docs-only repository). No diagnostics reported."
+        },
+        "impacts": {
+          "cross_file_consistency": "Aligns with docs/netcheck.md validation language.",
+          "functional": "No runtime changes (documentation only).",
+          "security": "Reduces implied centralized beaconing behavior."
+        },
+        "problem_resolved": "The transaction model repeated a single hard-coded canary IP example, reinforcing an implementation pattern that creates privacy beacons and brittleness."
+      },
+      "severity": "patch"
+    }
+  ],
+  "schema_id": "urn:antigravity:change-bundle:v1",
+  "schema_version": "1.0.0",
+  "target_model": "Gemini 3.1 Pro (2M)",
+  "validation": {
+    "character_encoding": "utf-8",
+    "json_strict": true,
+    "newline": "\n",
+    "notes": "No platform-provided schema was supplied at generation time; this document uses a self-describing, schema-friendly structure with stable types and explicit fields."
+  }
+}

@@ -13,3 +13,6 @@ To prevent repeating mistakes, we document ideas that have been formally evaluat
 
 ## 4. Containerized Router Sandbox (LXC/Docker)
 **Rejected**: Base container kernels require too much flash memory (>5MB). It would require an external USB drive, complicating the installation and violating the zero-marginal-cost philosophy.
+
+## 5. Bundled Commercial VPN Defaults
+**Rejected**: Shipping preconfigured paid endpoints, affiliate defaults, or covert monetization hooks creates a supply-chain and abuse risk, collapses user trust, and pushes the project toward surveillance incentives. Any tunneling must be explicitly configured by the operator and remain fully removable.

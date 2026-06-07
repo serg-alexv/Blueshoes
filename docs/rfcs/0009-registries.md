@@ -15,3 +15,4 @@ This document outlines the core constraints that govern all pull requests and ar
 ## 3. Security Limits
 - **No MITM**: Decryption of TLS traffic by the router is forbidden.
 - **No LLM Shell Access**: The LLM cannot write or execute shell commands on the router.
+- **No Bundled Paid Tunnels**: No preconfigured commercial VPN endpoints, affiliate defaults, or covert monetization hooks.

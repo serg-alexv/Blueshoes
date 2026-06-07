@@ -6,7 +6,7 @@ Modifying router state (`iptables`, `nftables`, `ip route`) is inherently danger
 
 1. **Snapshot**: Before touching anything, the agent caches the current, known-good network state into memory.
 2. **Apply**: The agent injects the new fallback routing profile.
-3. **Validate (Netcheck)**: The agent immediately runs a validation check (e.g., an HTTP GET to `1.1.1.1`).
+3. **Validate (Netcheck)**: The agent immediately runs a bounded connectivity check against operator-configured canary targets.
 4. **Commit or Rollback**:
    - If the request succeeds within 3 seconds, the new profile is **Committed**.
    - If the request times out or fails, the transaction is aborted, and the snapshot is **Rolled Back**.

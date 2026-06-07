@@ -5,7 +5,14 @@ This document establishes the initial T0 skeleton for the "Rhea Bounded Tribunal
 ## Philosophy
 The T0 Tribunal provides human-in-the-loop reviewers with external, role-based risk assessments on high-risk engineering artifacts prior to deployment or explicit mutation. The Tribunal does not execute commands, does not block pipelines deterministically, and never substitutes for human authorization. 
 
-Tribunal outputs are informational artifacts only and possess zero execution authority over:
+Tribunal artifacts MUST NOT be consumed by:
+- CI/CD gates
+- commit logic
+- push logic
+- runtime authorization
+- router execution paths
+
+Tribunal outputs are informational annotations only and possess ZERO execution authority over:
 - git operations
 - runtime execution
 - router state
@@ -13,7 +20,7 @@ Tribunal outputs are informational artifacts only and possess zero execution aut
 - deployment flow
 - human operator decisions
 
-No persistent tribunal memory or behavioral learning exists in T0. Each review artifact is isolated and non-authoritative. 
+No persistent tribunal memory or behavioral learning exists in T0. T0 MUST NOT implement reviewer reputation, weighted trust, historical behavioral learning, persistent scoring systems, or adaptive reviewer state. Each review artifact is isolated, non-authoritative, and non-learning.
 
 ## Constraints & Anti-Patterns
 To prevent the "bureaucratic recursion disease" and institutionalized hallucination, the Tribunal operates under the following hard constraints:

@@ -18,11 +18,12 @@ pub struct TransactionEvent {
     pub transaction_id: String,
     pub state: TransactionState,
     pub intent: Option<String>,
+    pub dry_run_plan: Option<Vec<String>>,
     pub mutation_performed: bool,
 }
 
 impl TransactionEvent {
-    pub fn new(transaction_id: String, state: TransactionState, intent: Option<String>) -> Self {
+    pub fn new(transaction_id: String, state: TransactionState, intent: Option<String>, dry_run_plan: Option<Vec<String>>) -> Self {
         use std::time::{SystemTime, UNIX_EPOCH};
         let start = SystemTime::now();
         let since_the_epoch = start.duration_since(UNIX_EPOCH).expect("Time went backwards");
@@ -33,6 +34,7 @@ impl TransactionEvent {
             transaction_id,
             state,
             intent,
+            dry_run_plan,
             mutation_performed: false,
         }
     }

@@ -1,0 +1,65 @@
+use crate::executor::{Executor, Snapshot};
+use crate::journal::planner::PlanStep;
+use std::process::Command;
+
+pub struct OpenWrtExecutor;
+
+impl Executor for OpenWrtExecutor {
+    fn capture_snapshot(&self) -> std::io::Result<Snapshot> {
+        // M7 Canary: Capture MTU via JSON
+        let output = Command::new("ip")
+            .args(["-json", "link", "show", "dev", "pppoe-wan"])
+            .output()?;
+
+        let state = String::from_utf8_lossy(&output.stdout).to_string();
+        
+        // Very basic extraction of MTU for rollback (we can just store the whole JSON for the watchdog)
+        // We will just let the watchdog parse the JSON or we can parse it here.
+        // Actually, for simplicity we will just extract the MTU manually or pass the JSON.
+        // Let's extract the MTU.
+        let parsed: serde_json::Value = serde_json::from_str(&state).unwrap_or_default();
+        let mtu = parsed[0]["mtu"].as_u64().unwrap_or(1500);
+
+        Ok(Snapshot {
+            metadata: "pppoe-wan".to_string(), // ifname
+            raw_state: mtu.to_string(),        // prev_mtu
+        })
+    }
+
+    fn apply(&self, plan: &[PlanStep]) -> std::io::Result<()> {
+        for step in plan {
+            match step {
+                PlanStep::AddRoute { target, via } => {
+                    let _ = Command::new("ip")
+                        .args(["route", "add", target, "via", via])
+                        .status()?;
+                }
+                PlanStep::AddNftRule { table, chain, rule } => {
+                    let mut args = vec!["add", "rule", table, chain];
+                    args.extend(rule.split_whitespace());
+                    let _ = Command::new("nft")
+                        .args(&args)
+                        .status()?;
+                }
+                PlanStep::SetMtu { interface, mtu } => {
+                    let _ = Command::new("ip")
+                        .args(["link", "set", "dev", interface, "mtu", &mtu.to_string()])
+                        .status()?;
+                }
+                PlanStep::FlushRouteCache => {
+                    let _ = Command::new("ip")
+                        .args(["route", "flush", "cache"])
+                        .status()?;
+                }
+            }
+        }
+        Ok(())
+    }
+
+    fn rollback(&self, snapshot: &Snapshot) -> std::io::Result<()> {
+        let _ = Command::new("ip")
+            .args(["link", "set", "dev", &snapshot.metadata, "mtu", &snapshot.raw_state])
+            .status()?;
+        Ok(())
+    }
+}

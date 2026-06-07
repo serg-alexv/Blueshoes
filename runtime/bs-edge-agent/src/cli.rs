@@ -66,4 +66,15 @@ pub enum Commands {
         #[arg(long, default_value_t = false)]
         json: bool,
     },
+    /// Simulate a dummy transaction
+    Dummy {
+        #[arg(long)]
+        json: bool,
+    },
+
+    /// Run M7 Canary Mutation validation
+    Canary {
+        #[arg(long)]
+        json: bool,
+    },
 }

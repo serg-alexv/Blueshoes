@@ -12,8 +12,8 @@ make setup-cross
 # Clean first to ensure fresh reproducible state
 make clean
 
-# Build all 3 targets
-make build-b0
+# Build all 3 targets with dangerous execution enabled
+make build-b0 FEATURES="--features dangerous_execution"
 
 # Gather metadata
 GIT_COMMIT=$(git rev-parse HEAD 2>/dev/null || echo "unknown")
@@ -40,8 +40,11 @@ get_file_info() {
 }
 
 OPENWRT_INFO=$(get_file_info "runtime/bs-edge-agent/target/aarch64-unknown-linux-musl/release/bs-edge-agent")
+OPENWRT_WATCHDOG_INFO=$(get_file_info "runtime/bs-edge-agent/target/aarch64-unknown-linux-musl/release/bs-watchdog")
 LINUX_INFO=$(get_file_info "runtime/bs-edge-agent/target/x86_64-unknown-linux-musl/release/bs-edge-agent")
+LINUX_WATCHDOG_INFO=$(get_file_info "runtime/bs-edge-agent/target/x86_64-unknown-linux-musl/release/bs-watchdog")
 MACOS_INFO=$(get_file_info "runtime/bs-edge-agent/target/aarch64-apple-darwin/release/bs-edge-agent")
+MACOS_WATCHDOG_INFO=$(get_file_info "runtime/bs-edge-agent/target/aarch64-apple-darwin/release/bs-watchdog")
 
 # Write metadata
 mkdir -p artifacts
@@ -55,9 +58,18 @@ cat <<EOF > artifacts/b0_release_metadata.json
     "cargo_zigbuild": "$CARGO_ZIGBUILD_VERSION"
   },
   "targets": {
-    "aarch64-unknown-linux-musl": $OPENWRT_INFO,
-    "x86_64-unknown-linux-musl": $LINUX_INFO,
-    "aarch64-apple-darwin": $MACOS_INFO
+    "aarch64-unknown-linux-musl": {
+      "bs-edge-agent": $OPENWRT_INFO,
+      "bs-watchdog": $OPENWRT_WATCHDOG_INFO
+    },
+    "x86_64-unknown-linux-musl": {
+      "bs-edge-agent": $LINUX_INFO,
+      "bs-watchdog": $LINUX_WATCHDOG_INFO
+    },
+    "aarch64-apple-darwin": {
+      "bs-edge-agent": $MACOS_INFO,
+      "bs-watchdog": $MACOS_WATCHDOG_INFO
+    }
   }
 }
 EOF

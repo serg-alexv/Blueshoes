@@ -4,9 +4,10 @@
 
 all: build
 
+FEATURES ?= 
 build:
 	@echo "Building bs-edge-agent..."
-	cd runtime/bs-edge-agent && cargo build --release
+	cd runtime/bs-edge-agent && cargo build --release $(FEATURES)
 
 test:
 	@echo "Running unit tests..."
@@ -37,17 +38,17 @@ setup-cross:
 
 build-openwrt:
 	@echo "Cross-compiling bs-edge-agent for aarch64-unknown-linux-musl..."
-	cd runtime/bs-edge-agent && cargo zigbuild --target aarch64-unknown-linux-musl --release
+	cd runtime/bs-edge-agent && cargo zigbuild --target aarch64-unknown-linux-musl --release $(FEATURES)
 	@echo "Success! Binary is located at: runtime/bs-edge-agent/target/aarch64-unknown-linux-musl/release/bs-edge-agent"
 
 build-x86_64:
 	@echo "Cross-compiling bs-edge-agent for x86_64-unknown-linux-musl..."
-	cd runtime/bs-edge-agent && cargo zigbuild --target x86_64-unknown-linux-musl --release
+	cd runtime/bs-edge-agent && cargo zigbuild --target x86_64-unknown-linux-musl --release $(FEATURES)
 	@echo "Success! Binary is located at: runtime/bs-edge-agent/target/x86_64-unknown-linux-musl/release/bs-edge-agent"
 
 build-macos:
 	@echo "Compiling bs-edge-agent for aarch64-apple-darwin..."
-	cd runtime/bs-edge-agent && cargo build --target aarch64-apple-darwin --release
+	cd runtime/bs-edge-agent && cargo build --target aarch64-apple-darwin --release $(FEATURES)
 	@echo "Success! Binary is located at: runtime/bs-edge-agent/target/aarch64-apple-darwin/release/bs-edge-agent"
 
 build-b0: build-openwrt build-x86_64 build-macos

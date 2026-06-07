@@ -1,22 +1,22 @@
-# Nettools Inventory
+# Network Toolset Topology
 
-To map georestriction pathologies accurately without bloating the router, Blueshoes carefully delegates diagnostic tools across the A/C architecture.
+**Definition:** The universal set of diagnostic tools $U_{tools}$ is partitioned into sets $E_{native}$, $W_{remote}$, and $F_{banned}$.
 
-## Router Core (`bs-edge-agent`)
-These tools are native to OpenWrt, incur zero additional storage cost, and are used by the deterministic rule-engine to detect pathologies.
-- **Discovery**: `ip`, `ss`, `arp` / `neigh`
-- **Performance/State**: `ping`, `conntrack`
-- **Routing**: `iproute2`, `nft` (or `iptables` compat)
-- **Capture**: `tcpdump` (Captures pcap to RAM, immediately pushes to Workbench).
-- **Canary Validation**: `curl`
+## $E_{native}$ (Router Core Set)
+**Condition (Necessary):** Elements of $E_{native}$ must exist within the base OpenWrt compilation and incur zero marginal flash cost.
+- $Discovery = \{\text{ip}, \text{ss}, \text{arp}\}$
+- $Performance = \{\text{ping}, \text{conntrack}\}$
+- $Routing = \{\text{iproute2}, \text{nft}\}$
+- $Capture = \{\text{tcpdump}\}$
+- $Validation = \{\text{curl}\}$
 
-## Workbench Only (`bs-workbench`)
-These tools are too heavy, require significant RAM, or have large dependencies. They run externally on the Debian/RHEL VM.
-- **Deep Capture Analysis**: `Wireshark`, `tshark`
-- **Heavy Discovery**: `nmap`, `mtr`
-- **Specialized DNS**: `kdig`, `drill` (for manual SVCB/HTTPS record validation during research).
-- **Performance/Load**: `iperf3`, `h2load`
+## $W_{remote}$ (Workbench Set)
+**Condition (Necessary):** Elements of $W_{remote}$ require dependency trees exceeding $Flash_{E} \le 5\text{MB}$ and therefore execute exclusively in space $W$.
+- $DeepAnalysis = \{\text{Wireshark}, \text{tshark}\}$
+- $HeavyDiscovery = \{\text{nmap}, \text{mtr}\}$
+- $AdvancedDNS = \{\text{kdig}, \text{drill}\}$
+- $LoadTest = \{\text{iperf3}, \text{h2load}\}$
 
-## Explicitly Forbidden in Runtime
-- **MITM Proxies**: `Charles Proxy` (See `mitm-ban.md`). Never installed on the router.
-- **Unbounded Scanners**: Masscan or automated nmap sweeps from the router itself.
+## $F_{banned}$ (Null Set)
+**Condition (Necessary):** Elements of $F_{banned}$ violate Axiom 2 (TLS Integrity) or execute unbounded heuristic mapping.
+- $F_{banned} = \{\text{Charles Proxy (Runtime)}, \text{Masscan (On-Router)}\}$

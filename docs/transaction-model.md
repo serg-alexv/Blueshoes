@@ -1,15 +1,13 @@
-# Transaction Model
+# Atomic Transaction Function
 
-The core of Blueshoes is the **Rollback-Safe Transaction Model**. Networking mutation is dangerous; applying a bad `nftables` or routing rule can permanently disconnect the device.
+**Definition:** The mutation of routing state $S_n \to S_{n+1}$ is an atomic operation governed by a rigid temporal constraint $t_{max}$.
 
-## The Atomic Transaction
-Every time the `bs-edge-agent` changes a profile, it executes a transaction:
+## Stepwise Execution
+1. **Snapshot ($S_{n}$):** Current stable state is defined and cached in local RAM.
+2. **Apply ($S_{temp}$):** Target profile rules $P_x$ are injected into kernel routing tables.
+3. **Validate ($V$):** A synthetic HTTP GET request (Canary) is dispatched. Let $t_v$ be the response time.
+4. **Decision Matrix:**
+   - If $V = \text{HTTP 200}$ and $t_v \le 3\text{s}$, execute $\text{Commit}(S_{temp} \to S_{n+1})$.
+   - If $V \ne \text{HTTP 200}$ or $t_v > 3\text{s}$, execute $\text{Rollback}(S_{temp} \to S_n)$.
 
-1. **Snapshot**: The current known-good routing state is cached in RAM.
-2. **Apply**: The new profile rules are injected into `nftables`/`iproute2`.
-3. **Validate**: The agent immediately fires a Canary Request (e.g., `curl --connect-timeout 3 https://validation-endpoint.com`).
-4. **Commit or Rollback**:
-   - If the canary succeeds (HTTP 200 OK), the snapshot is discarded.
-   - If the canary times out or fails, the transaction aborts, and the snapshot is restored *immediately* (< 5 seconds total).
-
-This guarantees that the router never stays offline due to a bad automated profile swap.
+**Condition (Necessary):** The sum temporal execution of the Rollback matrix must satisfy $t_{total} \le 5\text{s}$. Failure to satisfy this inequality violates Axiom 1.

@@ -1,24 +1,14 @@
-# LLM / Diagnostic Brain Boundary
+# Diagnostic LLM Boundary
 
-To prevent the system from becoming an "unrestricted AI agent," the integration of any LLM or AI diagnostic capability is tightly constrained.
+**Definition:** Let $L$ be the Large Language Model algorithm operating over a local context window. Let $E$ be the operational routing space.
 
-## The Physical Boundary
-- **Router (`bs-edge-agent`)**: Contains **ZERO** LLM capabilities. It relies entirely on deterministic code (Rust/C) and static, embedding-free classification rules.
-- **External VM (`bs-workbench`)**: Contains the LLM inference engine.
+## Physical Isolation
+**Condition (Necessary):** $L \notin E$. The intersection of the LLM memory footprint and the router's 512MB RAM pool must be the null set $\emptyset$.
 
-## The Logical Boundary (Read-Only)
-The `bs-workbench` LLM operates under a strict **Read-Only Advisory** paradigm.
+## Logical Isolation
+**Condition (Necessary):** $L$ is strictly read-only relative to $E$.
+**Condition (Sufficient):** $L(E_{telemetry}) \to \{report, P_{suggest}\}$.
 
-### Allowed Actions
-- Ingest telemetry DB extracts (SQLite dumps) from the edge agent.
-- Ingest raw PCAP files from the edge agent.
-- Classify complex, novel censorship signatures (e.g., identifying a new heuristic used by a state firewall to drop UDP packets).
-- Generate a human-readable JSON report.
-- Recommend which statically pre-compiled profile the user should activate.
-
-### Forbidden Actions
-- The LLM **cannot** issue shell commands (`ssh`, `uci`, `opkg`) directly to the router.
-- The LLM **cannot** write custom `iptables` or `nftables` rules on the fly.
-- The LLM **cannot** bypass the transaction engine.
-
-**Flow**: `Telemetry -> LLM -> JSON Recommendation -> Human Approval -> Edge Agent activates Static Profile`.
+## Forbidden Operations Set
+$L$ shall never execute elements of set $F_{shell} = \{\text{iptables}, \text{nft}, \text{ip route}, \text{uci}, \text{opkg}, \text{sh}\}$.
+The equation $L \to \text{shell}$ evaluates to $\text{false}$ under all operational conditions.

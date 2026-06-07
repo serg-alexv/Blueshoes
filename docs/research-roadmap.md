@@ -1,19 +1,22 @@
-# Research Roadmap
+# Sequential Progression Vector (Roadmap)
 
-## Phase 1: The A/C Separation (Current)
-- Finalize constraints and documentation for GL.iNet MT-3000.
-- Scaffold the `bs-edge-agent` in Rust.
-- Implement the baseline Transaction Engine (Snapshot -> Apply -> Validate -> Rollback).
-- Establish the SQLite telemetry database.
+**Definition:** The sequence of states required to reach Axiom 0. Let Phase $N$ represent a stable state $S_N$ of the codebase.
 
-## Phase 2: Diagnostic Maturation
-- Implement the `bs-workbench` VM.
-- Integrate the Read-Only LLM for parsing telemetry dumps.
-- Implement PCAP forwarding from the router to the workbench.
+## Phase 1: Isolation Boundary $S_1$ (Current)
+- **Constraint Matrix:** Finalize sets $H_{target}$ and all axiomatic bounds.
+- **Engine Scaffold:** Construct native $E_{roll}$ and $E_{prof}$ in Rust.
+- **Transaction Proof:** Execute and validate atomic cycle $S_n \to S_{n+1} \to S_n$ with $t \le 5\text{s}$.
+- **Data Vector:** Initialize SQLite schema for $E_{obs}$.
 
-## Phase 3: Advanced Obfuscation Profiles
-- Integrate AmneziaWG statically into the router profiles.
-- Implement fine-grained DOH/ECH routing fallbacks.
+## Phase 2: Analytic Mapping $S_2$
+- **External Node:** Construct node $W$ (Debian VM).
+- **Inference Mapping:** Instantiate $L(D_{SQLite}) \to P_{suggest}$.
+- **Vector Transfer:** Establish secure transport $E \to W$ for $P_{raw}$ (PCAP).
 
-## Phase 4: SOCKS/Cooperative Client Modeling
-- Evaluate cooperative client routing (where clients explicitly opt-in to the `bs-edge-agent` via SOCKS5 rather than transparent routing) to improve georestriction tracing.
+## Phase 3: Obfuscation Topology $S_3$
+- **Profile Injection:** Compile static AmneziaWG logic into set $P_{OBF}$.
+- **DNS Redirection:** Implement $P_{DOH}$ state matrices.
+
+## Phase 4: Mesh Telemetry Optimization $S_4$
+- **Global Exchange:** Implement logic for Axiom 3.
+- **Cooperative SOCKS:** Map $C_{end} \to E$ via explicit proxy opt-in vector to refine pathology tracing algorithms.

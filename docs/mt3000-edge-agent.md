@@ -1,21 +1,14 @@
-# MT-3000 Resource Budget
+# Resource Boundary Condition (MT-3000)
 
-The target hardware for the first prototype is the GL.iNet GL-MT3000 (MediaTek MT7981B Dual-core 1.3GHz, 512MB RAM, 256MB NAND Flash).
+**Definition:** The target hardware constant $H_{target}$ is defined as MediaTek MT7981B, bounded by $RAM_{total} = 512\text{MB}$ and $Flash_{total} = 256\text{MB}$.
 
-Because preserving standard router function is paramount, `bs-edge-agent` must operate within an extremely tight resource budget.
+## Hard Thresholds
+Let $E$ be the resident edge-agent process.
+1. **Memory Condition (Necessary):** $RAM_{E} \le 15\text{MB}$. Failure to satisfy this inequality triggers fatal OOM under connection load $C_{high}$.
+2. **Storage Condition (Necessary):** $Flash_{E} \le 5\text{MB}$. This ensures the residual variable $\Delta_{sysupgrade}$ remains mathematically positive for OpenWrt updates.
+3. **CPU Condition (Necessary):** $CPU_{E_{idle}} < 1\%$.
+4. **CPU Condition (Mutation):** $CPU_{E_{mut}} < 15\%$, limited to interval $t < 5\text{s}$.
+5. **Database Condition (Necessary):** Size of telemetry store $D_{SQLite} \le 2\text{MB}$. Enforced via FIFO log truncation.
 
-## Hard Budgets
-
-| Resource | Maximum Allowance | Justification |
-| :--- | :--- | :--- |
-| **RAM (Resident)** | 15 MB | 512MB is easily exhausted under high connection tracking loads or native OpenWrt services. |
-| **Flash Storage** | 5 MB | 256MB NAND is largely consumed by the base GL.iNet/OpenWrt firmware. Leaving room for sysupgrades is critical. |
-| **CPU (Idle)** | < 1% | The agent must sleep while waiting for telemetry events. |
-| **CPU (Mutation)** | < 15% | Brief spikes during transaction rollback/commit are allowed. |
-| **Telemetry DB** | 2 MB | Local SQLite database must aggressively rotate logs to prevent filling the flash. |
-
-## Feature Constraints Driven by Budget
-
-1. **No Local LLM**: Running a useful LLM requires 250MB+ RAM and large swap files. This would cripple the router. All LLM logic is moved to `bs-workbench`.
-2. **Language Choice**: Go is rejected due to its 10MB+ binary footprint. The agent will be written in **Rust** using `#![no_std]` or heavy `opt-level=z` optimizations to keep the binary under 3MB.
-3. **No Local VM/Containers**: Running LXC or Docker for a `bs-sandbox` is deferred, as a Debian userland exceeds the 5MB flash budget.
+## Corollary
+Given the aforementioned thresholds, $L \in H_{target}$ evaluates to $\text{false}$. Local LLM execution is structurally invalid. Language compilation for $E$ must strictly optimize for size (Rust `#![no_std]` or `-C opt-level=z`), rendering runtime-heavy languages (Go, Python) invalid.

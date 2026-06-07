@@ -1,20 +1,13 @@
-# Blueshoes Doctrine
+# Blueshoes Theorem Set (Doctrine)
 
-This document serves as the absolute source of truth for the project's engineering and architectural boundaries.
+**Axiom 0 (Core Goal):** Maximize internet access availability globally while minimizing per-node access cost via deterministic routing adaptation and aggregated telemetry exchange.
 
-## 1. Rollback is Sacred
-Any mutation authority granted to `bs-edge-agent` must be deterministic, bounded, observable, and rollback-safe. If an adaptation fails to validate via a canary request within a hard timeout (e.g., 5 seconds), the agent must deterministically revert the state to the previous snapshot.
+**Axiom 1 (Rollback Continuity):** Let $S_n$ be a known-good routing state. A mutation $S_n \to S_{n+1}$ requires validation sequence $V$. If $V = \text{false}$ within time $t \le 5\text{s}$, the system must deterministically revert $S_{n+1} \to S_n$.
 
-## 2. No Transparent MITM / TLS Interception
-Blueshoes **forbids** TLS interception and MITM architectures. We do not generate fake certificates, we do not require users to install root CAs for production routing, and we do not transparently inspect HTTPS payloads.
+**Axiom 2 (Cryptographic Integrity):** Let $T$ be a TLS session between client $C$ and server $S$. The mutation operator $M(T)$ shall perform no decryption, certificate substitution, or payload inspection. Transparent MITM is universally forbidden.
 
-## 3. Client Cooperation is Mandatory
-Blueshoes relies on the client (e.g., the browser) to perform secure connection logic (like ECH). Blueshoes cannot transparently force ECH into arbitrary client TLS sessions. It can only preserve, observe, validate, and route toward ECH-capable paths.
+**Axiom 3 (Global Mesh Cooperation):** Node $N_i$ must exchange aggregated, anonymized capability telemetry $D$ with Node $N_j$. The set of all $D$ optimizes the probability of successful routing paths for the global set of human operators.
 
-## 4. The LLM Boundary (Read-Only Diagnostics)
-An LLM may be used for diagnosing georestriction pathologies, but it is **strictly banned** from the control/mutation path.
-- **Allowed:** Reading telemetry, summarizing logs, explaining signatures, generating JSON recommendations.
-- **Forbidden:** Executing shell scripts on the router, dynamically modifying `iptables`/`nftables`, flashing firmware, or modifying core OpenWrt configurations.
+**Axiom 4 (Diagnostic Boundary):** Let $L$ be the Large Language Model function. Let $E$ be the edge-agent runtime. $L$ exists strictly outside $E$. $L$ maps telemetry arrays to a static profile index suggestion. $L$ shall not issue state-mutating system calls to $E$.
 
-## 5. Non-Destructive Removability
-Blueshoes must be designed such that removing or stopping the `bs-edge-agent` package immediately restores the router to its vanilla, perfectly functioning state. It must fail open/closed deterministically without leaving orphaned routing rules.
+**Axiom 5 (Non-Destructive Removability):** The termination or removal of agent $E$ must satisfy $E_{\text{off}} \to S_{\text{vanilla}}$, restoring the base router configuration without residual state fragments.

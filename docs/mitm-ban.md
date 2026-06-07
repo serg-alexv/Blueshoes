@@ -1,11 +1,10 @@
-# MITM Ban Policy
+# MITM Constraint Theorem
 
-**Blueshoes absolutely forbids TLS interception, SSL stripping, or any form of transparent Man-In-The-Middle (MITM) architecture for production traffic.**
+**Axiom Formulation:** Let $T$ represent an active TLS session. The mutation operator $M(T)$ shall not contain subroutines that perform decryption, certificate substitution, or inspection of the encrypted payload data $P$.
 
-## Why?
-1. **Security Degradation**: Installing custom root CAs on client devices fundamentally weakens their security posture.
-2. **Protocol Breaking**: Transparent MITM breaks advanced cryptographic features like Encrypted Client Hello (ECH) and certificate pinning, which are critical for censorship resistance.
-3. **Privacy Violation**: A router should never inspect the plaintext payloads of user traffic.
+## Necessary Conditions for Violation Prevention
+1. **Root CA Constraint:** Installation of synthetic Root Certificate Authorities into the trusted store of node $C_{end}$ is strictly evaluated as $\text{false}$.
+2. **Protocol Integrity:** The mapping $C_{end} \to S_{target}$ must preserve ECH and certificate pinning cryptographic properties unaltered.
 
-## Permitted Exceptions (Lab Environment Only)
-See `lab-tools.md` for explicit, client-cooperative diagnostic exceptions used purely for research and development.
+## Corollary
+Transparent Man-In-The-Middle (MITM) architecture evaluates to mathematically incompatible with Axiom 2 (Cryptographic Integrity). Under no operational circumstance shall $E$ execute MITM routing.

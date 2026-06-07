@@ -1,11 +1,10 @@
-# Encrypted Client Hello (ECH) Position
+# Encrypted Client Hello (ECH) Constraint
 
-Blueshoes acknowledges that **Encrypted Client Hello (ECH)** is a critical capability for bypassing Server Name Indication (SNI) based georestrictions.
+**Definition:** Let $E_{ECH}$ be the Encrypted Client Hello payload within a TLS ClientHello struct.
 
-## Architectural Stance
+## Stance
+**Condition (Necessary):** $E_{ECH}$ generation is the strict mathematical responsibility of the client $C_{end}$.
+**Condition (Forbidden):** $E$ (the router agent) shall not synthetically construct or inject $E_{ECH}$ on behalf of $C_{end}$.
 
-1. **No Fake ECH**: Blueshoes cannot and will not attempt to transparently "wrap" ordinary TLS traffic in ECH on behalf of the client. This is cryptographically impossible without breaking end-to-end TLS (which is banned).
-2. **Client Responsibility**: The end client (browser, app) must generate the ECH payload.
-3. **Router Responsibility**: The `bs-edge-agent` is responsible for:
-   - **Observability**: Ensuring the network allows DNS queries for SVCB/HTTPS records to pass unpoisoned.
-   - **Routing**: If a local ISP drops packets containing ECH (e.g., identifying the GREASE values or specific TLS structures), the agent detects this pathology and routes the traffic through an obfuscated profile (e.g., AmneziaWG) so the client's ECH payload reaches the destination intact.
+## Router Function
+**Condition (Sufficient):** $E$ observes $E_{ECH}$ transmission failure. Let failure event $F$ trigger routing profile $P_{obf}$ such that $P_{obf}(E_{ECH}) \to \text{Destination}$, preserving $E_{ECH}$ integrity without payload modification.

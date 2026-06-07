@@ -1,15 +1,21 @@
-# Rejected Ideas Registry
+# Falsified Execution Paths (Rejected Ideas)
 
-To prevent architectural amnesia, we document ideas that have been explicitly rejected and must not be reintroduced.
+**Definition:** The set $F_{rejected}$ contains architectural hypotheses that have been formally evaluated and mathematically proven to violate Axioms $0 \to 4$ or Target Constraints $H_{target}$.
 
-## 1. Local LLM on the MT-3000
-**Rejected**: 512MB RAM cannot support meaningful LLM inference (`llama.cpp` or otherwise) without heavily swapping to disk, destroying the router's base packet-forwarding capabilities.
+## Elements of $F_{rejected}$
 
-## 2. Transparent ECH / TLS MITM
-**Rejected**: Cryptographically impossible to do transparently without breaking end-to-end encryption. Violates the core doctrine of preserving privacy and security.
+1. **Local LLM Inference ($H_{target} \cap L$)**
+   - **Evaluation:** $512\text{MB RAM} \to \text{OOM}$ for any $L_{weights} > 0.4\text{GB}$.
+   - **Proof:** Swapping to NAND flash destroys $E_{obs}$ throughput. Thus, $L \in E = \text{false}$.
 
-## 3. Autonomous AI Shell Execution
-**Rejected**: Allowing an LLM to write `iptables` rules directly is a massive security and rollback risk. All mutation must go through deterministic, pre-compiled profiles.
+2. **Transparent ECH / MITM Proxying**
+   - **Evaluation:** Cryptographic interception $M(T)$ mathematically negates end-to-end encryption.
+   - **Proof:** Violates Axiom 2 (Cryptographic Integrity).
 
-## 4. Containerized Router Sandbox (LXC/Docker)
-**Rejected for Phase 1**: Too heavy for the 256MB flash on the MT-3000. Replaced by the external `bs-workbench`.
+3. **Autonomous $L$ Mutation (AI Shell Access)**
+   - **Evaluation:** Mapping $L_{suggest} \to \text{system\_call}$ bypasses deterministic bounds.
+   - **Proof:** Violates Axiom 4 (Diagnostic Boundary). Nullifies Axiom 1 (Rollback Continuity) due to non-deterministic temporal validation.
+
+4. **Containerized Sandbox ($E \in \text{Docker/LXC}$)**
+   - **Evaluation:** Base kernel plus container daemon exceeds $Flash_{E} \le 5\text{MB}$.
+   - **Proof:** Violates Storage Condition of $H_{target}$. Requires external USB block storage, violating "zero marginal cost" axiom.

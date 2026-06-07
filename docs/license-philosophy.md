@@ -1,14 +1,16 @@
-# License Philosophy: Vitality vs. Immortality
+# Licensing Axioms: Viral vs. Static Openness
 
-Choosing a license for Blueshoes depends on whether you prioritize **adoption (vitality)** or **preservation of openness (immortality)**.
+**Definition:** Let $V(x)$ be the adoption vitality function. Let $I(x)$ be the code preservation (immortality) function. Let $x$ be the license vector.
 
-## The MIT License (Current Choice)
-- **Pros (Vitality):** Maximum frictionless adoption. Commercial router vendors (like GL.iNet themselves, Asus, Ubiquiti) could integrate Blueshoes into their firmware with zero legal friction. It encourages wide distribution.
-- **Cons (Mortality):** Someone can take the Blueshoes code, make a highly advanced proprietary version of it, and close the source code. The community does not benefit from their improvements. 
+## The MIT Vector
+- **Condition:** $x = \text{MIT}$
+- **Evaluation:** $V(\text{MIT}) \to \text{Max}$. The probability of integration into proprietary hardware environments $H_p$ approaches 1.
+- **Mortality:** $I(\text{MIT}) \to 0$. The derivative work $D(x)$ is not mathematically bound to remain open. Corporate node enclosure is a valid state.
 
-## The GPLv3 / AGPLv3 License (The "Immortality" Option)
-- **Pros (Immortality):** Ensures that anyone who modifies Blueshoes and distributes it *must* release their modifications under the same open license. This prevents corporate capture and guarantees the codebase remains a public good for humanity forever.
-- **Cons (Friction):** Commercial router vendors are notoriously terrified of GPLv3 (due to "tivoization" clauses). It might reduce the chances of a major vendor shipping it by default in their stock firmware.
+## The GPLv3 Vector
+- **Condition:** $x = \text{GPLv3}$
+- **Evaluation:** $I(\text{GPLv3}) \to \text{Max}$. Any derivative mutation $D(x)$ mapping to a distributed binary must equal the open state.
+- **Friction:** $V(\text{GPLv3})$ is reduced within commercial nodes $H_p$ due to strict boundary conditions (anti-tivoization).
 
-## Recommendation for timelabs-npo
-If the goal is to protect the project from being enclosed by bad actors while ensuring it remains a tool for internet freedom, **GPLv3** is the standard "immortality" license for router software (OpenWrt itself uses GPLv2). If you want maximum chaotic spread regardless of who profits, stick with **MIT**.
+## Theorem
+If Axiom 0 requires global availability as a non-excludable public good, the necessary condition is $x = \text{GPLv3}$. If Axiom 0 prioritizes maximal rapid deployment disregarding enclosure risk, $x = \text{MIT}$.

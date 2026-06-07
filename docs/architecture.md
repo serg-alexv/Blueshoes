@@ -1,50 +1,42 @@
-# A/C Architecture & Transaction Flow
+# State Machine Architecture
 
-This document details the corrected architecture for the Blueshoes prototype, optimized for the GL.iNet GL-MT3000 OpenWrt router constraints (15MB RAM budget).
+**Definition:** The system architecture is a bifurcated set $\{A, C\}$ where $A$ is the deterministic execution path and $C$ is the non-deterministic analytic path.
 
-## Architecture Split
+## Set A: Runtime ($E$)
+**Condition (Necessary):** $E$ must compile natively for the router target ($MT7981B$).
+**Condition (Sufficient):** $E$ is written in Rust, statically compiled with `opt-level=z`, achieving binary size $S_b < 3\text{MB}$.
 
-The system uses a strict separation between the execution path (A) and the advanced diagnostic path (C).
+**Sub-components of $E$:**
+- $E_{check}$: Executes continuous Boolean validation $V(path) \in \{\text{true}, \text{false}\}$.
+- $E_{obs}$: Maps negative validation events to a local finite state vector (SQLite).
+- $E_{prof}$: Injects static routing rules to state table.
+- $E_{roll}$: Deterministic function enforcing Axiom 1 ($S_{n+1} \to S_n$).
 
-### A. `bs-edge-agent` (The Router Runtime)
-Written in **Rust** (optimized for size) to run natively on OpenWrt without heavy containerization (LXC/Docker are banned from Phase 1 due to 256MB flash limits).
-- **Core Components**:
-  - `netcheck`: Lightweight, continuous connection validation (ping, curl).
-  - `observability`: Captures TCP RSTs, DNS failures, logs to a 2MB SQLite DB.
-  - `profile-engine`: Applies strictly bounded, static routing rules via `nftables` / `uci`.
-  - `rollback-journal`: Ensures any applied profile that fails validation is reverted in < 5 seconds.
+## Set C: Analytics ($W$)
+**Condition (Necessary):** $W$ operates strictly external to the router bounds.
+**Condition (Sufficient):** $W$ executes on a Debian/RHEL Virtual Machine.
 
-### C. `bs-workbench` (The Diagnostic Brain)
-An external Debian/RHEL VM or laptop companion.
-- **Core Components**:
-  - `deep-analysis`: Runs `tshark`/`wireshark` on PCAPs pulled from the router.
-  - `llm-brain`: Ingests telemetry to classify novel georestriction strategies and generate profile recommendations (Read-Only).
+**Sub-components of $W$:**
+- $W_{pcap}$: Parses raw packet streams transferred from $E_{obs}$.
+- $W_{LLM}$: Non-deterministic function $L(telemetry) \to P_{index}$, where $P_{index}$ is a recommendation vector for $E_{prof}$.
 
-*(Note: The B layer, `bs-sandbox`, an LXC container on the router, is deferred as MT-3000 storage is too constrained).*
-
-## The Mutation Transaction Flow
-
+## Mutation Transaction Diagram
 ```mermaid
 stateDiagram-v2
-    [*] --> Baseline: Normal OpenWrt Routing
+    [*] --> S_0: Baseline State
+    S_0 --> E_obs: Continuous Observation
+    E_obs --> Pathology: Condition Detected
+    Pathology --> S_n_Snapshot: Trigger Transaction
     
-    Baseline --> Observability: Edge Agent monitors traffic
-    Observability --> PathologyDetected: e.g. SNI Filtering Match
-    
-    PathologyDetected --> TransactionInitiated: Edge Agent matches rule
-    
-    state TransactionInitiated {
-        [*] --> Snapshot: Record local routing state
-        Snapshot --> ApplyProfile: e.g. Switch to ECH_FORCED Profile
-        ApplyProfile --> Validate: Send Canary Request
-        
-        Validate --> Success: Canary Returns 200 OK
-        Validate --> Failure: Timeout (>3s) or TCP Error
-        
-        Failure --> Rollback: Immediate `uci revert` / `nft` flush
-        Rollback --> SnapshotRestored
+    state Transaction {
+        [*] --> S_n_Snapshot: Cache Routing State
+        S_n_Snapshot --> Apply_P_x: Inject Profile
+        Apply_P_x --> Validate_V: Emit Canary
+        Validate_V --> S_success: V = true
+        Validate_V --> S_fail: V = false (t > 3s)
+        S_fail --> Revert_S_n: Atomic Rollback
     }
     
-    Success --> NewBaseline: Commit Transaction
-    SnapshotRestored --> Baseline: Log Rollback Event
+    S_success --> S_1: Commit State
+    Revert_S_n --> S_0: Log Rollback
 ```

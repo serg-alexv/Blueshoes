@@ -1,11 +1,9 @@
-# Cooperative Lab Tools
+# Out-of-Band Diagnostic Tool Constraint
 
-While transparent MITM is banned in production (`mitm-ban.md`), deep diagnostic work during the research phase may require observing TLS negotiation.
+**Definition:** Let $D_{lab}$ be the set of deep-inspection diagnostic tools (e.g., Charles Proxy, mitmproxy). 
 
-## Allowed Lab Policy: Charles Proxy
-Tools like **Charles Proxy** or **mitmproxy** are permitted *only* under the following strict conditions:
-1. **Never on the Router**: These tools live exclusively in the `bs-workbench` or on a dedicated lab machine.
-2. **Explicit Client Cooperation**: The client device (e.g., test smartphone or browser) must be explicitly configured to use the proxy (e.g., via manual proxy settings or proxy auto-config).
-3. **Ephemeral CAs**: Root certificates installed for testing must be easily identifiable and wiped after the diagnostic session.
+## Boundary Condition
+**Condition (Necessary):** The intersection $D_{lab} \cap E$ must be the null set $\emptyset$. Deep-inspection tools shall not exist on the router hardware.
 
-This approach ensures the system can diagnose application-level georestrictions without embedding MITM capabilities into the router runtime.
+## Execution Condition
+**Condition (Sufficient):** $D_{lab}$ may execute exclusively within $W_{remote}$ provided that client $C_{end}$ executes an explicit, manual opt-in vector (e.g., manual SOCKS configuration) confirming mutual agreement. Ephemeral diagnostic certificates $C_{eph}$ must satisfy the condition $\text{Lifespan}(C_{eph}) \to 0$ upon session termination.

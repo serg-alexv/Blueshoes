@@ -80,4 +80,29 @@ Invoke Opus ONLY when at least one condition is true:
 - **Runtime First**: No governance expansion without runtime evidence.
 - **The Core Survival Equation**: runtime evidence growth > governance complexity growth.
 - **No External Dependency in Critical Path**: Router runtime must survive OpenRouter outage, HF outage, ChatGPT outage, AGY outage.
-- **Tribunal is Advisory**: Tribunal annotates risk. Humans and deterministic tests decide.
+## 8. TOOL EXPANSION BOUNDARIES
+These capabilities are tools, not authorities. No tool may become a runtime dependency, router authority, merge authority, automatic veto engine, or hidden orchestrator.
+
+### Code Wiki Early Access
+- **Approved Role**: Read-only code knowledge surface (repo explanation, architecture map, symbol lookup).
+- **Forbidden**: Repo mutation, commit/push, generating runtime commands as an authority.
+
+### Firebase Studio
+- **Approved Role**: Sandboxed prototype UI / non-runtime devship dashboard experiments.
+- **Forbidden**: Becoming Blueshoes runtime, storing canonical governance state, acting as tribunal authority. Default decision: Do NOT add Firebase to Blueshoes core.
+
+### Gemini Enterprise Agent Ready (GEAR)
+- **Approved Role**: Training / skilling / ADK familiarization.
+- **Forbidden**: Importing enterprise agent workflows into runtime, replacing `.tasks` governance, adding autonomous agents.
+
+### Google Cloud Monitoring
+- **Approved Role**: Read-only observability oracle (Viewer permissions only).
+- **Architecture**: Cloud Monitoring API v3 -> read-only collector -> `artifacts/gcp_monitoring_report.json` -> AGY evidence. Must fail closed (auth failure = status: unknown).
+
+### OpenAI APIs
+- **Responses API**: Approved for single-turn review, structured outputs, artifact analysis.
+- **Agents SDK**: Approved only for non-runtime developer tools, launch-planning, and tracing. MUST NOT control router or mutate repo. Keep API calls server-side.
+
+### Local Tooling
+- **GitHub Copilot**: Approved for autocomplete, boilerplate, and test scaffolding. Forbidden from architecture authority.
+- **Trae**: Implementation executor only. May edit repo within SPEC scope and generate bundles. May NOT change doctrine without SPEC or push without AGY gate.

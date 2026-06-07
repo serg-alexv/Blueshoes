@@ -1,0 +1,30 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Tribunal Review Request",
+  "description": "Template for requesting an advisory review from the T0 Passive Tribunal.",
+  "type": "object",
+  "properties": {
+    "task_uuid": {
+      "type": "string",
+      "description": "Unique identifier for the engineering task or milestone."
+    },
+    "mutation_intent": {
+      "type": "string",
+      "description": "A high-level summary of what this code change attempts to do."
+    },
+    "risk_level": {
+      "type": "string",
+      "enum": ["LOW", "MEDIUM", "HIGH", "CRITICAL"],
+      "description": "The self-assessed risk level of the change."
+    },
+    "diff_summary": {
+      "type": "string",
+      "description": "A truncated diff or unified diff summary of the proposed changes."
+    },
+    "doctrine_context": {
+      "type": "string",
+      "description": "Any active engineering constraints or rules (e.g., 'no external APIs')."
+    }
+  },
+  "required": ["task_uuid", "mutation_intent", "risk_level", "diff_summary"]
+}

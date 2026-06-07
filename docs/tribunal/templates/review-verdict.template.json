@@ -1,0 +1,44 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Tribunal Review Verdict",
+  "description": "Template for the advisory output of the T0 Passive Tribunal.",
+  "type": "object",
+  "properties": {
+    "task_uuid": {
+      "type": "string"
+    },
+    "verdicts": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "role": {
+            "type": "string",
+            "enum": ["security_reviewer", "governance_reviewer", "stability_reviewer"],
+            "description": "The logical role assessing the request."
+          },
+          "advisory_decision": {
+            "type": "string",
+            "enum": ["APPROVED", "FLAGGED", "VETO_RECOMMENDED"],
+            "description": "The risk annotation. Note: Even VETO_RECOMMENDED does not deterministically block."
+          },
+          "rationale": {
+            "type": "string",
+            "description": "The specific reasoning or rules cited by the reviewer."
+          }
+        },
+        "required": ["role", "advisory_decision", "rationale"]
+      }
+    },
+    "human_override": {
+      "type": "object",
+      "description": "Section for human operator to acknowledge findings and declare intent.",
+      "properties": {
+        "operator_id": { "type": "string" },
+        "action_taken": { "type": "string", "enum": ["PROCEED", "ABORT", "REVISE"] },
+        "justification": { "type": "string" }
+      }
+    }
+  },
+  "required": ["task_uuid", "verdicts"]
+}

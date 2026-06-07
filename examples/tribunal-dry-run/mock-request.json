@@ -1,7 +1,7 @@
 {
-  "task_uuid": "task-dryrun-001",
-  "mutation_intent": "Add a new endpoint to the bs-edge-agent API.",
-  "risk_level": "HIGH",
-  "diff_summary": "+++ b/runtime/bs-edge-agent/src/api/routes.rs\n+ pub async fn new_route() -> impl Responder { ... }",
+  "task_uuid": "SYNTHETIC-MOCK-0000",
+  "mutation_intent": "Update example synthetic function.",
+  "risk_level": "LOW",
+  "diff_summary": "docs/example.txt\ndiff_sha256: PLACEHOLDER",
   "doctrine_context": "No OpenRouter calls. No external execution."
 }

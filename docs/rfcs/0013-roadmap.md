@@ -1,15 +1,20 @@
 # Blueshoes Roadmap
 
 ## Phase 1: Core Engine Stabilization (Current)
-- Establish the architecture and hardware constraints (GL-MT3000).
-- Select the memory-safe language (Rust/Go) based on footprint testing.
-- Scaffold the `bs-edge-agent` and implement the atomic Snapshot/Rollback engine.
-- Initialize the local SQLite telemetry store for failure logging.
+- **[DONE] M1: Read-only Telemetry Probes**. `bs-edge-agent` safely reads Linux state and network endpoints.
+- **[DONE] M1.5: Cross-Compilation Scaffold**. Established the `aarch64-unknown-linux-musl` target.
+> [!IMPORTANT]  
+> **M1.6: Router Smoke Test** (CURRENT BLOCKER)
+> *Task:* `scp` the binary to the MT-3000, run `netcheck`, confirm no mutations, and capture the output. M2 cannot begin until verified.
 
-## Phase 2: Analytic Workflows
-- Build the `bs-workbench` VM environment.
-- Implement read-only LLM log parsing to map failures to profile suggestions.
-- Set up secure PCAP forwarding from the router to the workbench.
+## Phase 2: Transaction Engine & Edge Intelligence
+- **M2: Local Dummy Journal**.
+- **M3: Profile Schema Parser**. JSON validation of routing intents (e.g., "DNS_PRIVACY").
+- **M4: Dry-Run Transaction Planner**. Calculate `ip route` and `nftables` diffs strictly in memory.
+- **M5: The Fake Rollback Loop**. Test atomic rollback triggers without touching the system.
+- **M6: OpenWrt Adapter**. Bind the dry-run planner to actual `uci` and `netifd` execution APIs.
+- **M7: Canary Validation**. Perform a 30-second mutation and auto-rollback to guarantee failsafes.
+- **M8: First Controlled Mutation**. Execute the first permanent, deterministic routing update.
 
 ## Phase 3: Advanced Obfuscation
 - Implement fine-grained DNS-over-HTTPS/DoT fallbacks with strict privacy controls and clear user-visible configuration.
@@ -18,3 +23,6 @@
 ## Phase 4: Deferred Complexity (The Global Mesh)
 - **Opt-in Telemetry Exchange**: Evaluate peer-to-peer sharing of anonymized capability data between nodes. The goal is to crowdsource routing paths to defeat censorship at scale, structurally disrupting legacy VPN monetization models.
 - **Cooperative SOCKS**: Allow explicit client opt-in proxies for advanced tracing, with strong abuse-resistance and no transparent interception.
+
+## Deferred / Rejected Complexity
+- **Enterprise Orchestration**: No active CI/CD platforms, external webhooks, or automated queueing systems. The AI toolchain governance is strictly enforced via passive, local file locks in `.tasks/` (see `docs/dev-workflow.md`).

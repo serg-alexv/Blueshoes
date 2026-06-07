@@ -12,6 +12,19 @@ test:
 	@echo "Running unit tests..."
 	cd runtime/bs-edge-agent && cargo test
 
+# --- Cross Compilation for OpenWrt (GL-MT3000) ---
+# The GL-MT3000 uses a MediaTek MT7981B (Dual-core ARM Cortex-A53)
+# The correct Rust target is aarch64-unknown-linux-musl
+
+setup-cross:
+	@echo "Installing cross..."
+	cargo install cross --git https://github.com/cross-rs/cross
+
+build-openwrt:
+	@echo "Cross-compiling bs-edge-agent for aarch64-unknown-linux-musl..."
+	cd runtime/bs-edge-agent && cross build --target aarch64-unknown-linux-musl --release
+	@echo "Success! Binary is located at: runtime/bs-edge-agent/target/aarch64-unknown-linux-musl/release/bs-edge-agent"
+
 clean:
 	@echo "Cleaning workspace..."
 	cd runtime/bs-edge-agent && cargo clean

@@ -93,4 +93,20 @@ cargo run -- journal --tail 10
 ## Security Guarantees
 1. **No Target Mutations**: The `TelemetryEvent` struct natively enforces `mutation_performed = false`. 
 2. **Automated Audit**: During `cargo test`, `tests/audit_test.rs` rigorously scans the entire `src/` codebase to assert that forbidden strings (like `uci set` or `nft add`) do not exist. Any accidental inclusion of mutating commands will break the CI build.
-3. **No Dynamic Code Execution**: The Rust daemon compiles directly to a native binary. There is no Python runtime, bash script execution via `eval()`, or capability to ingest and execute remote payloads.
+## OpenWrt Deployment (M1.5 Cross-Compilation)
+The GL-MT3000 router uses a MediaTek MT7981B chip (Dual-core ARM Cortex-A53). The correct Rust target for this architecture is `aarch64-unknown-linux-musl`.
+
+To build the static binary for the router, we use the `cross` toolchain (which utilizes Docker to handle the C cross-compilation dependencies).
+
+1. Install cross:
+   ```bash
+   make setup-cross
+   ```
+2. Build the router binary:
+   ```bash
+   make build-openwrt
+   ```
+3. The resulting statically linked executable will be located at:
+   `runtime/bs-edge-agent/target/aarch64-unknown-linux-musl/release/bs-edge-agent`
+
+This binary can be safely `scp`'d directly to the router's `/tmp/` or `/usr/bin/` directory and executed without any external dependencies.

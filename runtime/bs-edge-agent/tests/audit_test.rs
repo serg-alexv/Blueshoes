@@ -59,11 +59,14 @@ fn test_cli_default_safety() {
         .arg("canary")
         .output()
         .expect("Failed to execute bs-edge-agent");
-        
+
     let stdout = String::from_utf8_lossy(&output.stdout);
     assert!(stdout.contains("\"execution_mode\": \"dry_run\""));
     assert!(stdout.contains("\"mutation_performed\": false"));
-    assert!(stdout.contains("dangerous_execution feature disabled") || stdout.contains("missing --unsafe-execute flag"));
+    assert!(
+        stdout.contains("dangerous_execution feature disabled")
+            || stdout.contains("missing --unsafe-execute flag")
+    );
 }
 
 #[test]
@@ -76,7 +79,7 @@ fn test_cli_force_dry_run() {
         .env("BS_FORCE_DRY_RUN", "1")
         .output()
         .expect("Failed to execute bs-edge-agent");
-        
+
     let stdout = String::from_utf8_lossy(&output.stdout);
     assert!(stdout.contains("\"execution_mode\": \"dry_run\""));
     assert!(stdout.contains("BS_FORCE_DRY_RUN=1 environment variable set"));

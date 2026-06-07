@@ -1,54 +1,20 @@
 {
   "schema_id": "urn:bs:healthcheck:v1",
   "run": {
-    "timestamp_utc": "2026-06-07T05:26:28.439860+00:00",
-    "git_sha": "54787f9b0f6e12ff8aacdbe7e658d47b07940a53",
+    "timestamp_utc": "2026-06-07T07:24:07.167991+00:00",
+    "git_sha": "d49b11ecf8e42c705cb90e51be8870022c851723",
     "branch": "main",
     "runner": "local"
   },
   "summary": {
     "critical": 0,
     "high": 0,
-    "medium": 23,
+    "medium": 22,
     "low": 0
   },
   "findings": [
     {
-      "id": "HLT-DOC-09793",
-      "category": "dead_leftover",
-      "severity": "medium",
-      "title": "Unreferenced documentation file: 0005-mitm-ban.md",
-      "evidence": [
-        "docs/0005-mitm-ban.md"
-      ],
-      "impact": "Documentation drift and clutter",
-      "remediation": {
-        "steps": [
-          "Link this doc in README.md or docs/index.md, or delete it."
-        ],
-        "owner_hint": "docs",
-        "issue_template": "tech-debt"
-      }
-    },
-    {
-      "id": "HLT-DOC-72673",
-      "category": "dead_leftover",
-      "severity": "medium",
-      "title": "Unreferenced documentation file: 0008-architecture.md",
-      "evidence": [
-        "docs/0008-architecture.md"
-      ],
-      "impact": "Documentation drift and clutter",
-      "remediation": {
-        "steps": [
-          "Link this doc in README.md or docs/index.md, or delete it."
-        ],
-        "owner_hint": "docs",
-        "issue_template": "tech-debt"
-      }
-    },
-    {
-      "id": "HLT-DOC-71747",
+      "id": "HLT-DOC-80194",
       "category": "dead_leftover",
       "severity": "medium",
       "title": "Unreferenced documentation file: 0017-nettools.md",
@@ -65,12 +31,12 @@
       }
     },
     {
-      "id": "HLT-DOC-95018",
+      "id": "HLT-DOC-97859",
       "category": "dead_leftover",
       "severity": "medium",
-      "title": "Unreferenced documentation file: 0002-rollback-model.md",
+      "title": "Unreferenced documentation file: 0008-architecture.md",
       "evidence": [
-        "docs/0002-rollback-model.md"
+        "docs/0008-architecture.md"
       ],
       "impact": "Documentation drift and clutter",
       "remediation": {
@@ -82,12 +48,12 @@
       }
     },
     {
-      "id": "HLT-DOC-35469",
+      "id": "HLT-DOC-46434",
       "category": "dead_leftover",
       "severity": "medium",
-      "title": "Unreferenced documentation file: 0007-phase1-acceptance.md",
+      "title": "Unreferenced documentation file: 0005-mitm-ban.md",
       "evidence": [
-        "docs/0007-phase1-acceptance.md"
+        "docs/0005-mitm-ban.md"
       ],
       "impact": "Documentation drift and clutter",
       "remediation": {
@@ -99,12 +65,12 @@
       }
     },
     {
-      "id": "HLT-DOC-85970",
+      "id": "HLT-DOC-84007",
       "category": "dead_leftover",
       "severity": "medium",
-      "title": "Unreferenced documentation file: 0016-lab-tools.md",
+      "title": "Unreferenced documentation file: tribunal-verdict.md",
       "evidence": [
-        "docs/0016-lab-tools.md"
+        "docs/tribunal-verdict.md"
       ],
       "impact": "Documentation drift and clutter",
       "remediation": {
@@ -116,194 +82,7 @@
       }
     },
     {
-      "id": "HLT-DOC-13842",
-      "category": "dead_leftover",
-      "severity": "medium",
-      "title": "Unreferenced documentation file: 0009-registries.md",
-      "evidence": [
-        "docs/0009-registries.md"
-      ],
-      "impact": "Documentation drift and clutter",
-      "remediation": {
-        "steps": [
-          "Link this doc in README.md or docs/index.md, or delete it."
-        ],
-        "owner_hint": "docs",
-        "issue_template": "tech-debt"
-      }
-    },
-    {
-      "id": "HLT-DOC-22996",
-      "category": "dead_leftover",
-      "severity": "medium",
-      "title": "Unreferenced documentation file: 0006-openwrt-state-snapshot.md",
-      "evidence": [
-        "docs/0006-openwrt-state-snapshot.md"
-      ],
-      "impact": "Documentation drift and clutter",
-      "remediation": {
-        "steps": [
-          "Link this doc in README.md or docs/index.md, or delete it."
-        ],
-        "owner_hint": "docs",
-        "issue_template": "tech-debt"
-      }
-    },
-    {
-      "id": "HLT-DOC-01463",
-      "category": "dead_leftover",
-      "severity": "medium",
-      "title": "Unreferenced documentation file: 0010-netcheck.md",
-      "evidence": [
-        "docs/0010-netcheck.md"
-      ],
-      "impact": "Documentation drift and clutter",
-      "remediation": {
-        "steps": [
-          "Link this doc in README.md or docs/index.md, or delete it."
-        ],
-        "owner_hint": "docs",
-        "issue_template": "tech-debt"
-      }
-    },
-    {
-      "id": "HLT-DOC-45464",
-      "category": "dead_leftover",
-      "severity": "medium",
-      "title": "Unreferenced documentation file: 0014-llm-boundary.md",
-      "evidence": [
-        "docs/0014-llm-boundary.md"
-      ],
-      "impact": "Documentation drift and clutter",
-      "remediation": {
-        "steps": [
-          "Link this doc in README.md or docs/index.md, or delete it."
-        ],
-        "owner_hint": "docs",
-        "issue_template": "tech-debt"
-      }
-    },
-    {
-      "id": "HLT-DOC-81275",
-      "category": "dead_leftover",
-      "severity": "medium",
-      "title": "Unreferenced documentation file: m1-telemetry.md",
-      "evidence": [
-        "docs/m1-telemetry.md"
-      ],
-      "impact": "Documentation drift and clutter",
-      "remediation": {
-        "steps": [
-          "Link this doc in README.md or docs/index.md, or delete it."
-        ],
-        "owner_hint": "docs",
-        "issue_template": "tech-debt"
-      }
-    },
-    {
-      "id": "HLT-DOC-98946",
-      "category": "dead_leftover",
-      "severity": "medium",
-      "title": "Unreferenced documentation file: 0020-local-sandbox-feasibility.md",
-      "evidence": [
-        "docs/0020-local-sandbox-feasibility.md"
-      ],
-      "impact": "Documentation drift and clutter",
-      "remediation": {
-        "steps": [
-          "Link this doc in README.md or docs/index.md, or delete it."
-        ],
-        "owner_hint": "docs",
-        "issue_template": "tech-debt"
-      }
-    },
-    {
-      "id": "HLT-DOC-79555",
-      "category": "dead_leftover",
-      "severity": "medium",
-      "title": "Unreferenced documentation file: 0019-license-philosophy.md",
-      "evidence": [
-        "docs/0019-license-philosophy.md"
-      ],
-      "impact": "Documentation drift and clutter",
-      "remediation": {
-        "steps": [
-          "Link this doc in README.md or docs/index.md, or delete it."
-        ],
-        "owner_hint": "docs",
-        "issue_template": "tech-debt"
-      }
-    },
-    {
-      "id": "HLT-DOC-97507",
-      "category": "dead_leftover",
-      "severity": "medium",
-      "title": "Unreferenced documentation file: 0013-roadmap.md",
-      "evidence": [
-        "docs/0013-roadmap.md"
-      ],
-      "impact": "Documentation drift and clutter",
-      "remediation": {
-        "steps": [
-          "Link this doc in README.md or docs/index.md, or delete it."
-        ],
-        "owner_hint": "docs",
-        "issue_template": "tech-debt"
-      }
-    },
-    {
-      "id": "HLT-DOC-80165",
-      "category": "dead_leftover",
-      "severity": "medium",
-      "title": "Unreferenced documentation file: dev-workflow.md",
-      "evidence": [
-        "docs/dev-workflow.md"
-      ],
-      "impact": "Documentation drift and clutter",
-      "remediation": {
-        "steps": [
-          "Link this doc in README.md or docs/index.md, or delete it."
-        ],
-        "owner_hint": "docs",
-        "issue_template": "tech-debt"
-      }
-    },
-    {
-      "id": "HLT-DOC-27973",
-      "category": "dead_leftover",
-      "severity": "medium",
-      "title": "Unreferenced documentation file: 0011-profiles.md",
-      "evidence": [
-        "docs/0011-profiles.md"
-      ],
-      "impact": "Documentation drift and clutter",
-      "remediation": {
-        "steps": [
-          "Link this doc in README.md or docs/index.md, or delete it."
-        ],
-        "owner_hint": "docs",
-        "issue_template": "tech-debt"
-      }
-    },
-    {
-      "id": "HLT-DOC-89413",
-      "category": "dead_leftover",
-      "severity": "medium",
-      "title": "Unreferenced documentation file: 0003-edge-agent-constraints.md",
-      "evidence": [
-        "docs/0003-edge-agent-constraints.md"
-      ],
-      "impact": "Documentation drift and clutter",
-      "remediation": {
-        "steps": [
-          "Link this doc in README.md or docs/index.md, or delete it."
-        ],
-        "owner_hint": "docs",
-        "issue_template": "tech-debt"
-      }
-    },
-    {
-      "id": "HLT-DOC-35080",
+      "id": "HLT-DOC-70475",
       "category": "dead_leftover",
       "severity": "medium",
       "title": "Unreferenced documentation file: 0015-workbench-vm.md",
@@ -320,12 +99,12 @@
       }
     },
     {
-      "id": "HLT-DOC-09380",
+      "id": "HLT-DOC-92303",
       "category": "dead_leftover",
       "severity": "medium",
-      "title": "Unreferenced documentation file: 0001-runtime-doctrine.md",
+      "title": "Unreferenced documentation file: 0020-local-sandbox-feasibility.md",
       "evidence": [
-        "docs/0001-runtime-doctrine.md"
+        "docs/0020-local-sandbox-feasibility.md"
       ],
       "impact": "Documentation drift and clutter",
       "remediation": {
@@ -337,41 +116,7 @@
       }
     },
     {
-      "id": "HLT-DOC-79978",
-      "category": "dead_leftover",
-      "severity": "medium",
-      "title": "Unreferenced documentation file: rhea-tribunal-adapter.md",
-      "evidence": [
-        "docs/rhea-tribunal-adapter.md"
-      ],
-      "impact": "Documentation drift and clutter",
-      "remediation": {
-        "steps": [
-          "Link this doc in README.md or docs/index.md, or delete it."
-        ],
-        "owner_hint": "docs",
-        "issue_template": "tech-debt"
-      }
-    },
-    {
-      "id": "HLT-DOC-18032",
-      "category": "dead_leftover",
-      "severity": "medium",
-      "title": "Unreferenced documentation file: 0018-rejected-ideas.md",
-      "evidence": [
-        "docs/0018-rejected-ideas.md"
-      ],
-      "impact": "Documentation drift and clutter",
-      "remediation": {
-        "steps": [
-          "Link this doc in README.md or docs/index.md, or delete it."
-        ],
-        "owner_hint": "docs",
-        "issue_template": "tech-debt"
-      }
-    },
-    {
-      "id": "HLT-DOC-28500",
+      "id": "HLT-DOC-58192",
       "category": "dead_leftover",
       "severity": "medium",
       "title": "Unreferenced documentation file: 0004-ech-position.md",
@@ -388,12 +133,250 @@
       }
     },
     {
-      "id": "HLT-DOC-65151",
+      "id": "HLT-DOC-69681",
       "category": "dead_leftover",
       "severity": "medium",
-      "title": "Unreferenced documentation file: 0012-phase1-scope.md",
+      "title": "Unreferenced documentation file: 0013-roadmap.md",
       "evidence": [
-        "docs/0012-phase1-scope.md"
+        "docs/0013-roadmap.md"
+      ],
+      "impact": "Documentation drift and clutter",
+      "remediation": {
+        "steps": [
+          "Link this doc in README.md or docs/index.md, or delete it."
+        ],
+        "owner_hint": "docs",
+        "issue_template": "tech-debt"
+      }
+    },
+    {
+      "id": "HLT-DOC-02457",
+      "category": "dead_leftover",
+      "severity": "medium",
+      "title": "Unreferenced documentation file: 0018-rejected-ideas.md",
+      "evidence": [
+        "docs/0018-rejected-ideas.md"
+      ],
+      "impact": "Documentation drift and clutter",
+      "remediation": {
+        "steps": [
+          "Link this doc in README.md or docs/index.md, or delete it."
+        ],
+        "owner_hint": "docs",
+        "issue_template": "tech-debt"
+      }
+    },
+    {
+      "id": "HLT-DOC-07229",
+      "category": "dead_leftover",
+      "severity": "medium",
+      "title": "Unreferenced documentation file: 0006-openwrt-state-snapshot.md",
+      "evidence": [
+        "docs/0006-openwrt-state-snapshot.md"
+      ],
+      "impact": "Documentation drift and clutter",
+      "remediation": {
+        "steps": [
+          "Link this doc in README.md or docs/index.md, or delete it."
+        ],
+        "owner_hint": "docs",
+        "issue_template": "tech-debt"
+      }
+    },
+    {
+      "id": "HLT-DOC-21346",
+      "category": "dead_leftover",
+      "severity": "medium",
+      "title": "Unreferenced documentation file: 0016-lab-tools.md",
+      "evidence": [
+        "docs/0016-lab-tools.md"
+      ],
+      "impact": "Documentation drift and clutter",
+      "remediation": {
+        "steps": [
+          "Link this doc in README.md or docs/index.md, or delete it."
+        ],
+        "owner_hint": "docs",
+        "issue_template": "tech-debt"
+      }
+    },
+    {
+      "id": "HLT-DOC-25412",
+      "category": "dead_leftover",
+      "severity": "medium",
+      "title": "Unreferenced documentation file: 0003-edge-agent-constraints.md",
+      "evidence": [
+        "docs/0003-edge-agent-constraints.md"
+      ],
+      "impact": "Documentation drift and clutter",
+      "remediation": {
+        "steps": [
+          "Link this doc in README.md or docs/index.md, or delete it."
+        ],
+        "owner_hint": "docs",
+        "issue_template": "tech-debt"
+      }
+    },
+    {
+      "id": "HLT-DOC-02854",
+      "category": "dead_leftover",
+      "severity": "medium",
+      "title": "Unreferenced documentation file: 0009-registries.md",
+      "evidence": [
+        "docs/0009-registries.md"
+      ],
+      "impact": "Documentation drift and clutter",
+      "remediation": {
+        "steps": [
+          "Link this doc in README.md or docs/index.md, or delete it."
+        ],
+        "owner_hint": "docs",
+        "issue_template": "tech-debt"
+      }
+    },
+    {
+      "id": "HLT-DOC-40328",
+      "category": "dead_leftover",
+      "severity": "medium",
+      "title": "Unreferenced documentation file: rhea-tribunal-adapter.md",
+      "evidence": [
+        "docs/rhea-tribunal-adapter.md"
+      ],
+      "impact": "Documentation drift and clutter",
+      "remediation": {
+        "steps": [
+          "Link this doc in README.md or docs/index.md, or delete it."
+        ],
+        "owner_hint": "docs",
+        "issue_template": "tech-debt"
+      }
+    },
+    {
+      "id": "HLT-DOC-23499",
+      "category": "dead_leftover",
+      "severity": "medium",
+      "title": "Unreferenced documentation file: 0007-phase1-acceptance.md",
+      "evidence": [
+        "docs/0007-phase1-acceptance.md"
+      ],
+      "impact": "Documentation drift and clutter",
+      "remediation": {
+        "steps": [
+          "Link this doc in README.md or docs/index.md, or delete it."
+        ],
+        "owner_hint": "docs",
+        "issue_template": "tech-debt"
+      }
+    },
+    {
+      "id": "HLT-DOC-74802",
+      "category": "dead_leftover",
+      "severity": "medium",
+      "title": "Unreferenced documentation file: 0011-profiles.md",
+      "evidence": [
+        "docs/0011-profiles.md"
+      ],
+      "impact": "Documentation drift and clutter",
+      "remediation": {
+        "steps": [
+          "Link this doc in README.md or docs/index.md, or delete it."
+        ],
+        "owner_hint": "docs",
+        "issue_template": "tech-debt"
+      }
+    },
+    {
+      "id": "HLT-DOC-10770",
+      "category": "dead_leftover",
+      "severity": "medium",
+      "title": "Unreferenced documentation file: m1-telemetry.md",
+      "evidence": [
+        "docs/m1-telemetry.md"
+      ],
+      "impact": "Documentation drift and clutter",
+      "remediation": {
+        "steps": [
+          "Link this doc in README.md or docs/index.md, or delete it."
+        ],
+        "owner_hint": "docs",
+        "issue_template": "tech-debt"
+      }
+    },
+    {
+      "id": "HLT-DOC-87862",
+      "category": "dead_leftover",
+      "severity": "medium",
+      "title": "Unreferenced documentation file: dev-workflow.md",
+      "evidence": [
+        "docs/dev-workflow.md"
+      ],
+      "impact": "Documentation drift and clutter",
+      "remediation": {
+        "steps": [
+          "Link this doc in README.md or docs/index.md, or delete it."
+        ],
+        "owner_hint": "docs",
+        "issue_template": "tech-debt"
+      }
+    },
+    {
+      "id": "HLT-DOC-88890",
+      "category": "dead_leftover",
+      "severity": "medium",
+      "title": "Unreferenced documentation file: 0010-netcheck.md",
+      "evidence": [
+        "docs/0010-netcheck.md"
+      ],
+      "impact": "Documentation drift and clutter",
+      "remediation": {
+        "steps": [
+          "Link this doc in README.md or docs/index.md, or delete it."
+        ],
+        "owner_hint": "docs",
+        "issue_template": "tech-debt"
+      }
+    },
+    {
+      "id": "HLT-DOC-31035",
+      "category": "dead_leftover",
+      "severity": "medium",
+      "title": "Unreferenced documentation file: tribunal-request.md",
+      "evidence": [
+        "docs/tribunal-request.md"
+      ],
+      "impact": "Documentation drift and clutter",
+      "remediation": {
+        "steps": [
+          "Link this doc in README.md or docs/index.md, or delete it."
+        ],
+        "owner_hint": "docs",
+        "issue_template": "tech-debt"
+      }
+    },
+    {
+      "id": "HLT-DOC-91930",
+      "category": "dead_leftover",
+      "severity": "medium",
+      "title": "Unreferenced documentation file: 0014-llm-boundary.md",
+      "evidence": [
+        "docs/0014-llm-boundary.md"
+      ],
+      "impact": "Documentation drift and clutter",
+      "remediation": {
+        "steps": [
+          "Link this doc in README.md or docs/index.md, or delete it."
+        ],
+        "owner_hint": "docs",
+        "issue_template": "tech-debt"
+      }
+    },
+    {
+      "id": "HLT-DOC-64031",
+      "category": "dead_leftover",
+      "severity": "medium",
+      "title": "Unreferenced documentation file: 0019-license-philosophy.md",
+      "evidence": [
+        "docs/0019-license-philosophy.md"
       ],
       "impact": "Documentation drift and clutter",
       "remediation": {
@@ -406,7 +389,7 @@
     }
   ],
   "trend_keys": {
-    "dead_leftover_count": 23,
+    "dead_leftover_count": 22,
     "rollback_violation_count": 0,
     "doc_staleness_count": 0
   }

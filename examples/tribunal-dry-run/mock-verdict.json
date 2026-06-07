@@ -1,0 +1,25 @@
+{
+  "task_uuid": "task-dryrun-001",
+  "verdicts": [
+    {
+      "role": "security_reviewer",
+      "advisory_decision": "APPROVED",
+      "rationale": "No credential leakage observed in the diff. Standard routing implementation."
+    },
+    {
+      "role": "stability_reviewer",
+      "advisory_decision": "FLAGGED",
+      "rationale": "Async block in new_route does not specify a timeout constraint. Consider adding one."
+    },
+    {
+      "role": "governance_reviewer",
+      "advisory_decision": "APPROVED",
+      "rationale": "Changes are bounded to the runtime and do not violate doctrine."
+    }
+  ],
+  "human_override": {
+    "operator_id": "sa",
+    "action_taken": "PROCEED",
+    "justification": "Flagged stability issue acknowledged. Evaluated as non-critical for this release. Proceeding."
+  }
+}

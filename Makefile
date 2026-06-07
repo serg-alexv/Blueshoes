@@ -58,6 +58,11 @@ clean:
 	@echo "Cleaning workspace..."
 	cd runtime/bs-edge-agent && cargo clean
 
+# --- Healthcheck ---
+healthcheck:
+	@echo "Running global healthcheck..."
+	@./scripts/bs_healthcheck.py
+
 # --- The Local Message Bus (.tasks/) ---
 
 TASKS_DIR := .tasks

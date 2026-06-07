@@ -14,12 +14,10 @@ pub enum Commands {
         #[arg(long, default_value_t = true)]
         json: bool,
     },
-    /// Perform a read-only network validation check
+    /// Perform a read-only network validation check and append to journal
     Netcheck {
         #[arg(long, default_value_t = true)]
         json: bool,
-        #[arg(short, long, default_value = "http://1.1.1.1")]
-        target: String,
     },
     /// List available static routing profiles
     Profiles {
@@ -28,7 +26,7 @@ pub enum Commands {
     },
     /// Output the local event journal
     Journal {
-        #[arg(long, default_value_t = true)]
-        json: bool,
+        #[arg(long)]
+        tail: Option<usize>,
     },
 }

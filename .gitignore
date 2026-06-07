@@ -2,3 +2,7 @@ target/
 artifacts/*
 !artifacts/devship/
 .tasks/
+*.live.json
+*grant*.json
+!synthetic-grant.json
+!human-capability-grant.template.json

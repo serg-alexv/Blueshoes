@@ -1,0 +1,21 @@
+{
+  "schema_id": "urn:blueshoes:human-capability-grant:v1",
+  "grant_id": "grant-synthetic-example-001",
+  "human_principal": "public-owner-profile-id",
+  "statement": "synthetic test to validate mecha dry-run functionality",
+  "allowed_executor": "MECHA",
+  "allowed_spec": "sha256:e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "allowed_targets": [
+    "router:example:192.0.2.1"
+  ],
+  "actions": [
+    "scp_binary_to_tmp",
+    "ssh_run_netcheck"
+  ],
+  "expires_at_utc": "2099-12-31T23:59:59Z",
+  "rollback_required": false,
+  "mutation_allowed": false,
+  "evidence_required": true,
+  "evidence_output": "artifacts/devship/mecha-evidence/synthetic-evidence.json",
+  "human_signature": "<synthetic-signature>"
+}

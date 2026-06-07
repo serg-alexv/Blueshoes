@@ -6,29 +6,19 @@
   "allowed_executor": "MECHA",
   "allowed_spec": "sha256:<SPEC_HASH>",
   "allowed_targets": [
-    "router:gl-mt3000:192.168.8.1"
+    "router:gl-mt3000:192.0.2.1"
   ],
-  "allowed_commands": [
-    "scp bs-edge-agent to /tmp/bs-edge-agent",
-    "/tmp/bs-edge-agent status --json",
-    "/tmp/bs-edge-agent netcheck --json",
-    "/tmp/bs-edge-agent journal --tail 10"
-  ],
-  "forbidden_commands": [
-    "uci set",
-    "uci commit",
-    "nft add",
-    "iptables",
-    "ip route add",
-    "ip route del",
-    "wg set",
-    "reboot",
-    "sysupgrade"
+  "actions": [
+    "scp_binary_to_tmp",
+    "ssh_run_status",
+    "ssh_run_netcheck",
+    "ssh_read_journal_tail",
+    "ssh_collect_router_facts"
   ],
   "expires_at_utc": "2026-06-07T23:59:59Z",
   "rollback_required": false,
   "mutation_allowed": false,
   "evidence_required": true,
-  "evidence_output": "artifacts/devship/m5-router-smoke-evidence.json",
+  "evidence_output": "artifacts/devship/mecha-evidence/grant-TEMPLATE-001.json",
   "human_signature": "<webauthn|minisign|gpg|github-verified-signature>"
 }
